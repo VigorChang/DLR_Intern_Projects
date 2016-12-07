@@ -1,0 +1,75 @@
+# # File gsaved with Nlview version 6.3.8  2013-12-19 bk=1.2992 VDI=34 GEI=35
+# 
+preplace inst soc.read_master_sgdma -pg 1 -lvl 3 -y 110
+preplace inst soc.hps_0.gmac1 -pg 1
+preplace inst soc.hps_0.qspi -pg 1
+preplace inst soc.hps_0.timer2 -pg 1
+preplace inst soc.hps_0.clkmgr -pg 1
+preplace inst soc.hps_0.L2 -pg 1
+preplace inst soc.hps_0.nand0 -pg 1
+preplace inst soc.hps_0.timer3 -pg 1
+preplace inst soc.hps_0.bridges -pg 1
+preplace inst soc.sc_fifo_0 -pg 1 -lvl 4 -y 40
+preplace inst soc.hps_0.arm_gic_0 -pg 1
+preplace inst soc.hps_0.axi_sdram -pg 1
+preplace inst soc.hps_0.rstmgr -pg 1
+preplace inst soc.hps_0.clk_0 -pg 1
+preplace inst soc.hps_0.sdrctl -pg 1
+preplace inst soc.hps_0.i2c0 -pg 1
+preplace inst soc.hps_0.uart0 -pg 1
+preplace inst soc.hps_0.dma -pg 1
+preplace inst soc.hps_0.eosc1 -pg 1
+preplace inst soc.sgdma_write -pg 1 -lvl 4 -y 120
+preplace inst soc.hps_0.i2c1 -pg 1
+preplace inst soc.hps_0.uart1 -pg 1
+preplace inst soc.hps_0.fpgamgr -pg 1
+preplace inst soc.hps_0.eosc2 -pg 1
+preplace inst soc.sgdma_read -pg 1 -lvl 2 -y 30
+preplace inst soc.hps_0.sdmmc -pg 1
+preplace inst soc.hps_0.i2c2 -pg 1
+preplace inst soc.hps_0.spim0 -pg 1
+preplace inst soc.hps_0.i2c3 -pg 1
+preplace inst soc.clk_0 -pg 1 -lvl 1 -y 90
+preplace inst soc.write_master_sgdma -pg 1 -lvl 5 -y 200
+preplace inst soc.hps_0.timer -pg 1
+preplace inst soc.hps_0.dcan0 -pg 1
+preplace inst soc.hps_0.usb0 -pg 1
+preplace inst soc.hps_0.spim1 -pg 1
+preplace inst soc.hps_0.sysmgr -pg 1
+preplace inst soc.hps_0.arm_a9_0 -pg 1
+preplace inst soc.hps_0 -pg 1 -lvl 6 -y 280
+preplace inst soc.hps_0.l3regs -pg 1
+preplace inst soc.hps_0.dcan1 -pg 1
+preplace inst soc.hps_0.usb1 -pg 1
+preplace inst soc.hps_0.gpio0 -pg 1
+preplace inst soc.hps_0.wd_timer0 -pg 1
+preplace inst soc.hps_0.arm_a9_1 -pg 1
+preplace inst soc -pg 1 -lvl 1 -y 40 -regy -20
+preplace inst soc.hps_0.gpio1 -pg 1
+preplace inst soc.hps_0.wd_timer1 -pg 1
+preplace inst soc.hps_0.f2s_sdram_ref_clk -pg 1
+preplace inst soc.hps_0.hps_io.border -pg 1
+preplace inst soc.hps_0.gpio2 -pg 1
+preplace inst soc.hps_0.timer0 -pg 1
+preplace inst soc.hps_0.f2s_periph_ref_clk -pg 1
+preplace inst soc.hps_0.axi_ocram -pg 1
+preplace inst soc.hps_0.gmac0 -pg 1
+preplace inst soc.hps_0.timer1 -pg 1
+preplace inst soc.hps_0.hps_io -pg 1
+preplace inst soc.hps_0.fpga_interfaces -pg 1
+preplace netloc POINT_TO_POINT<net_container>soc</net_container>(SLAVE)write_master_sgdma.Command_Sink,(MASTER)sgdma_write.Write_Command_Source) 1 4 1 1350
+preplace netloc POINT_TO_POINT<net_container>soc</net_container>(MASTER)read_master_sgdma.Response_Source,(SLAVE)sgdma_read.Read_Response_Sink) 1 1 3 320 200 NJ 200 920
+preplace netloc EXPORT<net_container>soc</net_container>(SLAVE)soc.reset,(SLAVE)clk_0.clk_in_reset) 1 0 1 NJ
+preplace netloc FAN_OUT<net_container>soc</net_container>(SLAVE)hps_0.f2h_sdram0_clock,(SLAVE)sgdma_read.clock,(SLAVE)hps_0.f2h_sdram1_clock,(SLAVE)hps_0.h2f_lw_axi_clock,(SLAVE)sc_fifo_0.clk,(SLAVE)write_master_sgdma.Clock,(SLAVE)sgdma_write.clock,(SLAVE)read_master_sgdma.Clock,(MASTER)clk_0.clk) 1 1 5 280 220 660 220 1000 270 1370 330 1700
+preplace netloc POINT_TO_POINT<net_container>soc</net_container>(SLAVE)sc_fifo_0.in,(MASTER)read_master_sgdma.Data_Source) 1 3 1 980
+preplace netloc POINT_TO_POINT<net_container>soc</net_container>(MASTER)write_master_sgdma.Data_Write_Master,(SLAVE)hps_0.f2h_sdram0_data) 1 5 1 1680
+preplace netloc POINT_TO_POINT<net_container>soc</net_container>(SLAVE)write_master_sgdma.Data_Sink,(MASTER)sc_fifo_0.out) 1 4 1 1390
+preplace netloc FAN_OUT<net_container>soc</net_container>(SLAVE)sgdma_write.CSR,(SLAVE)sgdma_write.Descriptor_Slave,(MASTER)hps_0.h2f_lw_axi_master,(SLAVE)sgdma_read.CSR,(SLAVE)sgdma_read.Descriptor_Slave) 1 1 6 300 180 NJ 100 960 30 NJ 30 NJ 30 2010
+preplace netloc POINT_TO_POINT<net_container>soc</net_container>(MASTER)sgdma_read.Read_Command_Source,(SLAVE)read_master_sgdma.Command_Sink) 1 2 1 640
+preplace netloc EXPORT<net_container>soc</net_container>(SLAVE)clk_0.clk_in,(SLAVE)soc.clk) 1 0 1 NJ
+preplace netloc FAN_OUT<net_container>soc</net_container>(MASTER)clk_0.clk_reset,(SLAVE)sgdma_write.clock_reset,(SLAVE)sgdma_read.clock_reset,(SLAVE)read_master_sgdma.Clock_reset,(SLAVE)sc_fifo_0.clk_reset,(SLAVE)write_master_sgdma.Clock_reset) 1 1 4 260 240 680 240 1020 290 NJ
+preplace netloc EXPORT<net_container>soc</net_container>(SLAVE)soc.memory,(SLAVE)hps_0.memory) 1 0 6 NJ 390 NJ 390 NJ 390 NJ 390 NJ 390 NJ
+preplace netloc POINT_TO_POINT<net_container>soc</net_container>(SLAVE)sgdma_write.Write_Response_Sink,(MASTER)write_master_sgdma.Response_Source) 1 3 3 1040 310 NJ 310 1660
+preplace netloc POINT_TO_POINT<net_container>soc</net_container>(SLAVE)hps_0.f2h_sdram1_data,(MASTER)read_master_sgdma.Data_Read_Master) 1 3 3 940 350 NJ 350 NJ
+levelinfo -pg 1 0 50 2050
+levelinfo -hier soc 60 90 350 710 1070 1440 1820 2030
