@@ -1,7 +1,5 @@
 # DLR Internship Projects
 
-[TOC]
-
 ## Introduction
 
 These projects and documentation are what I have done during my internship at DLR. Following is the description on my CV.
