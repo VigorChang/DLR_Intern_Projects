@@ -57,9 +57,9 @@ module soc_hps_0_fpga_interfaces(
  ,input wire [29 - 1 : 0 ] f2h_sdram0_ADDRESS
  ,input wire [8 - 1 : 0 ] f2h_sdram0_BURSTCOUNT
  ,output wire [1 - 1 : 0 ] f2h_sdram0_WAITREQUEST
- ,output wire [64 - 1 : 0 ] f2h_sdram0_READDATA
- ,output wire [1 - 1 : 0 ] f2h_sdram0_READDATAVALID
- ,input wire [1 - 1 : 0 ] f2h_sdram0_READ
+ ,input wire [64 - 1 : 0 ] f2h_sdram0_WRITEDATA
+ ,input wire [8 - 1 : 0 ] f2h_sdram0_BYTEENABLE
+ ,input wire [1 - 1 : 0 ] f2h_sdram0_WRITE
 // f2h_sdram0_clock
  ,input wire [1 - 1 : 0 ] f2h_sdram0_clk
 );
@@ -71,7 +71,7 @@ assign intermediate[4:4] = intermediate[3:3];
 assign intermediate[2:2] = intermediate[5:5];
 assign intermediate[6:6] = intermediate[5:5];
 assign f2h_sdram0_WAITREQUEST[0:0] = intermediate[0:0];
-assign intermediate[3:3] = f2h_sdram0_READ[0:0];
+assign intermediate[3:3] = f2h_sdram0_WRITE[0:0];
 assign intermediate[5:5] = f2h_sdram0_clk[0:0];
 
 cyclonev_hps_interface_clocks_resets clocks_resets(
@@ -273,14 +273,20 @@ cyclonev_hps_interface_fpga2sdram f2sdram(
    ,f2h_sdram0_BURSTCOUNT[7:0] // 41:34
    ,3'b000 // 33:31
    ,f2h_sdram0_ADDRESS[28:0] // 30:2
-   ,1'b0 // 1:1
-   ,intermediate[3:3] // 0:0
+   ,intermediate[3:3] // 1:1
+   ,1'b0 // 0:0
   })
 ,.cmd_port_clk_0({
     intermediate[6:6] // 0:0
   })
-,.rd_clk_0({
-    intermediate[2:2] // 0:0
+,.wr_data_0({
+    2'b00 // 89:88
+   ,f2h_sdram0_BYTEENABLE[7:0] // 87:80
+   ,16'b0000000000000000 // 79:64
+   ,f2h_sdram0_WRITEDATA[63:0] // 63:0
+  })
+,.wrack_ready_0({
+    1'b1 // 0:0
   })
 ,.cfg_rfifo_cport_map({
     16'b0000000000000000 // 15:0
@@ -291,20 +297,14 @@ cyclonev_hps_interface_fpga2sdram f2sdram(
 ,.cfg_port_width({
     12'b000000000001 // 11:0
   })
-,.rd_valid_0({
-    f2h_sdram0_READDATAVALID[0:0] // 0:0
-  })
-,.rd_ready_0({
-    1'b1 // 0:0
-  })
-,.rd_data_0({
-    f2h_sdram0_READDATA[63:0] // 63:0
-  })
 ,.cmd_valid_0({
     intermediate[4:4] // 0:0
   })
 ,.cfg_cport_type({
-    12'b000000000010 // 11:0
+    12'b000000000001 // 11:0
+  })
+,.wr_clk_0({
+    intermediate[2:2] // 0:0
   })
 ,.cfg_cport_rfifo_map({
     18'b000000000000000000 // 17:0

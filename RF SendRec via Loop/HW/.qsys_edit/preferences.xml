@@ -5,7 +5,6 @@
   <columns>
    <connections preferredWidth="287" />
    <irq preferredWidth="34" />
-   <security visible="1" />
   </columns>
  </systemtable>
  <library expandedCategories="Project/MyriadRFPorject,Library,Project" />

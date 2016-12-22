@@ -8,30 +8,31 @@ use IEEE.numeric_std.all;
 
 entity soc is
 	port (
-		clk_clk                     : in    std_logic                     := '0';             --                 clk.clk
-		memory_mem_a                : out   std_logic_vector(14 downto 0);                    --              memory.mem_a
-		memory_mem_ba               : out   std_logic_vector(2 downto 0);                     --                    .mem_ba
-		memory_mem_ck               : out   std_logic;                                        --                    .mem_ck
-		memory_mem_ck_n             : out   std_logic;                                        --                    .mem_ck_n
-		memory_mem_cke              : out   std_logic;                                        --                    .mem_cke
-		memory_mem_cs_n             : out   std_logic;                                        --                    .mem_cs_n
-		memory_mem_ras_n            : out   std_logic;                                        --                    .mem_ras_n
-		memory_mem_cas_n            : out   std_logic;                                        --                    .mem_cas_n
-		memory_mem_we_n             : out   std_logic;                                        --                    .mem_we_n
-		memory_mem_reset_n          : out   std_logic;                                        --                    .mem_reset_n
-		memory_mem_dq               : inout std_logic_vector(31 downto 0) := (others => '0'); --                    .mem_dq
-		memory_mem_dqs              : inout std_logic_vector(3 downto 0)  := (others => '0'); --                    .mem_dqs
-		memory_mem_dqs_n            : inout std_logic_vector(3 downto 0)  := (others => '0'); --                    .mem_dqs_n
-		memory_mem_odt              : out   std_logic;                                        --                    .mem_odt
-		memory_mem_dm               : out   std_logic_vector(3 downto 0);                     --                    .mem_dm
-		memory_oct_rzqin            : in    std_logic                     := '0';             --                    .oct_rzqin
-		reset_reset_n               : in    std_logic                     := '0';             --               reset.reset_n
-		rfsend_conduit_en_in        : in    std_logic                     := '0';             --      rfsend_conduit.en_in
-		rfsend_conduit_rftxdata     : out   std_logic_vector(11 downto 0);                    --                    .rftxdata
-		rfsend_conduit_rftxen       : out   std_logic;                                        --                    .rftxen
-		rfsend_conduit_rftxiqsel    : out   std_logic;                                        --                    .rftxiqsel
-		rfsend_txclk_clk            : in    std_logic                     := '0';             --        rfsend_txclk.clk
-		sendcontrol_conduit_send_en : out   std_logic                                         -- sendcontrol_conduit.send_en
+		clk_clk            : in    std_logic                     := '0';             --        clk.clk
+		memory_mem_a       : out   std_logic_vector(14 downto 0);                    --     memory.mem_a
+		memory_mem_ba      : out   std_logic_vector(2 downto 0);                     --           .mem_ba
+		memory_mem_ck      : out   std_logic;                                        --           .mem_ck
+		memory_mem_ck_n    : out   std_logic;                                        --           .mem_ck_n
+		memory_mem_cke     : out   std_logic;                                        --           .mem_cke
+		memory_mem_cs_n    : out   std_logic;                                        --           .mem_cs_n
+		memory_mem_ras_n   : out   std_logic;                                        --           .mem_ras_n
+		memory_mem_cas_n   : out   std_logic;                                        --           .mem_cas_n
+		memory_mem_we_n    : out   std_logic;                                        --           .mem_we_n
+		memory_mem_reset_n : out   std_logic;                                        --           .mem_reset_n
+		memory_mem_dq      : inout std_logic_vector(31 downto 0) := (others => '0'); --           .mem_dq
+		memory_mem_dqs     : inout std_logic_vector(3 downto 0)  := (others => '0'); --           .mem_dqs
+		memory_mem_dqs_n   : inout std_logic_vector(3 downto 0)  := (others => '0'); --           .mem_dqs_n
+		memory_mem_odt     : out   std_logic;                                        --           .mem_odt
+		memory_mem_dm      : out   std_logic_vector(3 downto 0);                     --           .mem_dm
+		memory_oct_rzqin   : in    std_logic                     := '0';             --           .oct_rzqin
+		reccontrol_enrec   : out   std_logic;                                        -- reccontrol.enrec
+		reset_reset_n      : in    std_logic                     := '0';             --      reset.reset_n
+		rfrec_rxclock      : in    std_logic                     := '0';             --      rfrec.rxclock
+		rfrec_rxdata       : in    std_logic_vector(11 downto 0) := (others => '0'); --           .rxdata
+		rfrec_rxenable     : out   std_logic;                                        --           .rxenable
+		rfrec_rxiq         : in    std_logic                     := '0';             --           .rxiq
+		rfrec_recen        : in    std_logic                     := '0';             --           .recen
+		rfrec_testled      : out   std_logic_vector(3 downto 0)                      --           .testled
 	);
 end entity soc;
 
@@ -99,12 +100,12 @@ architecture rtl of soc is
 			descriptor_waitrequest  : out std_logic;                                         -- waitrequest
 			descriptor_writedata    : in  std_logic_vector(127 downto 0) := (others => 'X'); -- writedata
 			descriptor_byteenable   : in  std_logic_vector(15 downto 0)  := (others => 'X'); -- byteenable
-			src_read_master_data    : out std_logic_vector(255 downto 0);                    -- data
-			src_read_master_valid   : out std_logic;                                         -- valid
-			src_read_master_ready   : in  std_logic                      := 'X';             -- ready
-			snk_read_master_data    : in  std_logic_vector(255 downto 0) := (others => 'X'); -- data
-			snk_read_master_valid   : in  std_logic                      := 'X';             -- valid
-			snk_read_master_ready   : out std_logic;                                         -- ready
+			src_write_master_data   : out std_logic_vector(255 downto 0);                    -- data
+			src_write_master_valid  : out std_logic;                                         -- valid
+			src_write_master_ready  : in  std_logic                      := 'X';             -- ready
+			snk_write_master_data   : in  std_logic_vector(255 downto 0) := (others => 'X'); -- data
+			snk_write_master_valid  : in  std_logic                      := 'X';             -- valid
+			snk_write_master_ready  : out std_logic;                                         -- ready
 			csr_irq                 : out std_logic;                                         -- irq
 			src_response_data       : out std_logic_vector(255 downto 0);                    -- data
 			src_response_valid      : out std_logic;                                         -- valid
@@ -114,99 +115,87 @@ architecture rtl of soc is
 			mm_response_address     : in  std_logic                      := 'X';             -- address
 			mm_response_readdata    : out std_logic_vector(31 downto 0);                     -- readdata
 			mm_response_read        : in  std_logic                      := 'X';             -- read
-			src_write_master_data   : out std_logic_vector(255 downto 0);                    -- data
-			src_write_master_valid  : out std_logic;                                         -- valid
-			src_write_master_ready  : in  std_logic                      := 'X';             -- ready
-			snk_write_master_data   : in  std_logic_vector(255 downto 0) := (others => 'X'); -- data
-			snk_write_master_valid  : in  std_logic                      := 'X';             -- valid
-			snk_write_master_ready  : out std_logic                                          -- ready
+			src_read_master_data    : out std_logic_vector(255 downto 0);                    -- data
+			src_read_master_valid   : out std_logic;                                         -- valid
+			src_read_master_ready   : in  std_logic                      := 'X';             -- ready
+			snk_read_master_data    : in  std_logic_vector(255 downto 0) := (others => 'X'); -- data
+			snk_read_master_valid   : in  std_logic                      := 'X';             -- valid
+			snk_read_master_ready   : out std_logic                                          -- ready
 		);
 	end component dispatcher;
 
-	component read_master is
+	component write_master is
 		generic (
-			DATA_WIDTH                : integer := 32;
-			LENGTH_WIDTH              : integer := 32;
-			FIFO_DEPTH                : integer := 32;
-			STRIDE_ENABLE             : integer := 0;
-			BURST_ENABLE              : integer := 0;
-			PACKET_ENABLE             : integer := 0;
-			ERROR_ENABLE              : integer := 0;
-			ERROR_WIDTH               : integer := 8;
-			CHANNEL_ENABLE            : integer := 0;
-			CHANNEL_WIDTH             : integer := 8;
-			BYTE_ENABLE_WIDTH         : integer := 4;
-			BYTE_ENABLE_WIDTH_LOG2    : integer := 2;
-			ADDRESS_WIDTH             : integer := 32;
-			FIFO_DEPTH_LOG2           : integer := 5;
-			SYMBOL_WIDTH              : integer := 8;
-			NUMBER_OF_SYMBOLS         : integer := 4;
-			NUMBER_OF_SYMBOLS_LOG2    : integer := 2;
-			MAX_BURST_COUNT_WIDTH     : integer := 2;
-			UNALIGNED_ACCESSES_ENABLE : integer := 0;
-			ONLY_FULL_ACCESS_ENABLE   : integer := 0;
-			BURST_WRAPPING_SUPPORT    : integer := 1;
-			PROGRAMMABLE_BURST_ENABLE : integer := 0;
-			MAX_BURST_COUNT           : integer := 2;
-			FIFO_SPEED_OPTIMIZATION   : integer := 1;
-			STRIDE_WIDTH              : integer := 1
+			DATA_WIDTH                     : integer := 32;
+			LENGTH_WIDTH                   : integer := 32;
+			FIFO_DEPTH                     : integer := 32;
+			STRIDE_ENABLE                  : integer := 0;
+			BURST_ENABLE                   : integer := 0;
+			PACKET_ENABLE                  : integer := 0;
+			ERROR_ENABLE                   : integer := 0;
+			ERROR_WIDTH                    : integer := 8;
+			BYTE_ENABLE_WIDTH              : integer := 4;
+			BYTE_ENABLE_WIDTH_LOG2         : integer := 2;
+			ADDRESS_WIDTH                  : integer := 32;
+			FIFO_DEPTH_LOG2                : integer := 5;
+			SYMBOL_WIDTH                   : integer := 8;
+			NUMBER_OF_SYMBOLS              : integer := 4;
+			NUMBER_OF_SYMBOLS_LOG2         : integer := 2;
+			MAX_BURST_COUNT_WIDTH          : integer := 2;
+			UNALIGNED_ACCESSES_ENABLE      : integer := 0;
+			ONLY_FULL_ACCESS_ENABLE        : integer := 0;
+			BURST_WRAPPING_SUPPORT         : integer := 1;
+			PROGRAMMABLE_BURST_ENABLE      : integer := 0;
+			MAX_BURST_COUNT                : integer := 2;
+			FIFO_SPEED_OPTIMIZATION        : integer := 1;
+			STRIDE_WIDTH                   : integer := 1;
+			ACTUAL_BYTES_TRANSFERRED_WIDTH : integer := 32
 		);
 		port (
-			clk                  : in  std_logic                      := 'X';             -- clk
-			reset                : in  std_logic                      := 'X';             -- reset
-			master_address       : out std_logic_vector(31 downto 0);                     -- address
-			master_read          : out std_logic;                                         -- read
-			master_byteenable    : out std_logic_vector(1 downto 0);                      -- byteenable
-			master_readdata      : in  std_logic_vector(15 downto 0)  := (others => 'X'); -- readdata
-			master_waitrequest   : in  std_logic                      := 'X';             -- waitrequest
-			master_readdatavalid : in  std_logic                      := 'X';             -- readdatavalid
-			src_data             : out std_logic_vector(15 downto 0);                     -- data
-			src_valid            : out std_logic;                                         -- valid
-			src_ready            : in  std_logic                      := 'X';             -- ready
-			snk_command_data     : in  std_logic_vector(255 downto 0) := (others => 'X'); -- data
-			snk_command_valid    : in  std_logic                      := 'X';             -- valid
-			snk_command_ready    : out std_logic;                                         -- ready
-			src_response_data    : out std_logic_vector(255 downto 0);                    -- data
-			src_response_valid   : out std_logic;                                         -- valid
-			src_response_ready   : in  std_logic                      := 'X';             -- ready
-			master_burstcount    : out std_logic_vector(0 downto 0);                      -- burstcount
-			src_sop              : out std_logic;                                         -- startofpacket
-			src_eop              : out std_logic;                                         -- endofpacket
-			src_empty            : out std_logic;                                         -- empty
-			src_error            : out std_logic_vector(7 downto 0);                      -- error
-			src_channel          : out std_logic_vector(7 downto 0)                       -- channel
+			clk                : in  std_logic                      := 'X';             -- clk
+			reset              : in  std_logic                      := 'X';             -- reset
+			master_address     : out std_logic_vector(31 downto 0);                     -- address
+			master_write       : out std_logic;                                         -- write
+			master_byteenable  : out std_logic_vector(1 downto 0);                      -- byteenable
+			master_writedata   : out std_logic_vector(15 downto 0);                     -- writedata
+			master_waitrequest : in  std_logic                      := 'X';             -- waitrequest
+			snk_data           : in  std_logic_vector(15 downto 0)  := (others => 'X'); -- data
+			snk_valid          : in  std_logic                      := 'X';             -- valid
+			snk_ready          : out std_logic;                                         -- ready
+			snk_command_data   : in  std_logic_vector(255 downto 0) := (others => 'X'); -- data
+			snk_command_valid  : in  std_logic                      := 'X';             -- valid
+			snk_command_ready  : out std_logic;                                         -- ready
+			src_response_data  : out std_logic_vector(255 downto 0);                    -- data
+			src_response_valid : out std_logic;                                         -- valid
+			src_response_ready : in  std_logic                      := 'X';             -- ready
+			master_burstcount  : out std_logic_vector(0 downto 0);                      -- burstcount
+			snk_sop            : in  std_logic                      := 'X';             -- startofpacket
+			snk_eop            : in  std_logic                      := 'X';             -- endofpacket
+			snk_empty          : in  std_logic                      := 'X';             -- empty
+			snk_error          : in  std_logic_vector(7 downto 0)   := (others => 'X')  -- error
 		);
-	end component read_master;
+	end component write_master;
 
-	component RFSend is
+	component RFReceive is
 		port (
-			reset          : in  std_logic                     := 'X';             -- reset
-			SendEnable     : in  std_logic                     := 'X';             -- en_in
-			TXD            : out std_logic_vector(11 downto 0);                    -- rftxdata
-			TXEN           : out std_logic;                                        -- rftxen
-			TXIQSEL        : out std_logic;                                        -- rftxiqsel
-			rfSend_i_data  : in  std_logic_vector(15 downto 0) := (others => 'X'); -- data
-			rfSend_i_ready : out std_logic;                                        -- ready
-			rfSend_i_valid : in  std_logic                     := 'X';             -- valid
-			rfSend_i_clk   : out std_logic;                                        -- clk
-			TXCLK          : in  std_logic                     := 'X';             -- clk
-			clk            : in  std_logic                     := 'X';             -- clk
-			rfSend_q_data  : in  std_logic_vector(15 downto 0) := (others => 'X'); -- data
-			rfSend_q_ready : out std_logic;                                        -- ready
-			rfSend_q_valid : in  std_logic                     := 'X';             -- valid
-			rfSend_q_clk   : out std_logic                                         -- clk
+			clk           : in  std_logic                     := 'X';             -- clk
+			reset         : in  std_logic                     := 'X';             -- reset
+			RXCLK         : in  std_logic                     := 'X';             -- rxclock
+			RXD           : in  std_logic_vector(11 downto 0) := (others => 'X'); -- rxdata
+			RXEN          : out std_logic;                                        -- rxenable
+			RXIQSEL       : in  std_logic                     := 'X';             -- rxiq
+			RecEnable     : in  std_logic                     := 'X';             -- recen
+			LED           : out std_logic_vector(3 downto 0);                     -- testled
+			rfRec_i_data  : out std_logic_vector(15 downto 0);                    -- data
+			rfRec_i_ready : in  std_logic                     := 'X';             -- ready
+			rfRec_i_valid : out std_logic;                                        -- valid
+			rfRec_q_data  : out std_logic_vector(15 downto 0);                    -- data
+			rfRec_q_ready : in  std_logic                     := 'X';             -- ready
+			rfRec_q_valid : out std_logic;                                        -- valid
+			rfRec_i_clk   : out std_logic;                                        -- clk
+			rfRec_q_clk   : out std_logic                                         -- clk
 		);
-	end component RFSend;
-
-	component sendCtrl is
-		port (
-			clk        : in  std_logic                    := 'X';             -- clk
-			reset      : in  std_logic                    := 'X';             -- reset
-			SendEnable : out std_logic;                                       -- send_en
-			write_data : in  std_logic_vector(7 downto 0) := (others => 'X'); -- writedata
-			write_en   : in  std_logic                    := 'X'              -- write
-		);
-	end component sendCtrl;
+	end component RFReceive;
 
 	component soc_hps_0 is
 		generic (
@@ -214,92 +203,100 @@ architecture rtl of soc is
 			S2F_Width : integer := 2
 		);
 		port (
-			mem_a                    : out   std_logic_vector(14 downto 0);                    -- mem_a
-			mem_ba                   : out   std_logic_vector(2 downto 0);                     -- mem_ba
-			mem_ck                   : out   std_logic;                                        -- mem_ck
-			mem_ck_n                 : out   std_logic;                                        -- mem_ck_n
-			mem_cke                  : out   std_logic;                                        -- mem_cke
-			mem_cs_n                 : out   std_logic;                                        -- mem_cs_n
-			mem_ras_n                : out   std_logic;                                        -- mem_ras_n
-			mem_cas_n                : out   std_logic;                                        -- mem_cas_n
-			mem_we_n                 : out   std_logic;                                        -- mem_we_n
-			mem_reset_n              : out   std_logic;                                        -- mem_reset_n
-			mem_dq                   : inout std_logic_vector(31 downto 0) := (others => 'X'); -- mem_dq
-			mem_dqs                  : inout std_logic_vector(3 downto 0)  := (others => 'X'); -- mem_dqs
-			mem_dqs_n                : inout std_logic_vector(3 downto 0)  := (others => 'X'); -- mem_dqs_n
-			mem_odt                  : out   std_logic;                                        -- mem_odt
-			mem_dm                   : out   std_logic_vector(3 downto 0);                     -- mem_dm
-			oct_rzqin                : in    std_logic                     := 'X';             -- oct_rzqin
-			h2f_rst_n                : out   std_logic;                                        -- reset_n
-			f2h_sdram0_clk           : in    std_logic                     := 'X';             -- clk
-			f2h_sdram0_ADDRESS       : in    std_logic_vector(28 downto 0) := (others => 'X'); -- address
-			f2h_sdram0_BURSTCOUNT    : in    std_logic_vector(7 downto 0)  := (others => 'X'); -- burstcount
-			f2h_sdram0_WAITREQUEST   : out   std_logic;                                        -- waitrequest
-			f2h_sdram0_READDATA      : out   std_logic_vector(63 downto 0);                    -- readdata
-			f2h_sdram0_READDATAVALID : out   std_logic;                                        -- readdatavalid
-			f2h_sdram0_READ          : in    std_logic                     := 'X';             -- read
-			h2f_lw_axi_clk           : in    std_logic                     := 'X';             -- clk
-			h2f_lw_AWID              : out   std_logic_vector(11 downto 0);                    -- awid
-			h2f_lw_AWADDR            : out   std_logic_vector(20 downto 0);                    -- awaddr
-			h2f_lw_AWLEN             : out   std_logic_vector(3 downto 0);                     -- awlen
-			h2f_lw_AWSIZE            : out   std_logic_vector(2 downto 0);                     -- awsize
-			h2f_lw_AWBURST           : out   std_logic_vector(1 downto 0);                     -- awburst
-			h2f_lw_AWLOCK            : out   std_logic_vector(1 downto 0);                     -- awlock
-			h2f_lw_AWCACHE           : out   std_logic_vector(3 downto 0);                     -- awcache
-			h2f_lw_AWPROT            : out   std_logic_vector(2 downto 0);                     -- awprot
-			h2f_lw_AWVALID           : out   std_logic;                                        -- awvalid
-			h2f_lw_AWREADY           : in    std_logic                     := 'X';             -- awready
-			h2f_lw_WID               : out   std_logic_vector(11 downto 0);                    -- wid
-			h2f_lw_WDATA             : out   std_logic_vector(31 downto 0);                    -- wdata
-			h2f_lw_WSTRB             : out   std_logic_vector(3 downto 0);                     -- wstrb
-			h2f_lw_WLAST             : out   std_logic;                                        -- wlast
-			h2f_lw_WVALID            : out   std_logic;                                        -- wvalid
-			h2f_lw_WREADY            : in    std_logic                     := 'X';             -- wready
-			h2f_lw_BID               : in    std_logic_vector(11 downto 0) := (others => 'X'); -- bid
-			h2f_lw_BRESP             : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- bresp
-			h2f_lw_BVALID            : in    std_logic                     := 'X';             -- bvalid
-			h2f_lw_BREADY            : out   std_logic;                                        -- bready
-			h2f_lw_ARID              : out   std_logic_vector(11 downto 0);                    -- arid
-			h2f_lw_ARADDR            : out   std_logic_vector(20 downto 0);                    -- araddr
-			h2f_lw_ARLEN             : out   std_logic_vector(3 downto 0);                     -- arlen
-			h2f_lw_ARSIZE            : out   std_logic_vector(2 downto 0);                     -- arsize
-			h2f_lw_ARBURST           : out   std_logic_vector(1 downto 0);                     -- arburst
-			h2f_lw_ARLOCK            : out   std_logic_vector(1 downto 0);                     -- arlock
-			h2f_lw_ARCACHE           : out   std_logic_vector(3 downto 0);                     -- arcache
-			h2f_lw_ARPROT            : out   std_logic_vector(2 downto 0);                     -- arprot
-			h2f_lw_ARVALID           : out   std_logic;                                        -- arvalid
-			h2f_lw_ARREADY           : in    std_logic                     := 'X';             -- arready
-			h2f_lw_RID               : in    std_logic_vector(11 downto 0) := (others => 'X'); -- rid
-			h2f_lw_RDATA             : in    std_logic_vector(31 downto 0) := (others => 'X'); -- rdata
-			h2f_lw_RRESP             : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- rresp
-			h2f_lw_RLAST             : in    std_logic                     := 'X';             -- rlast
-			h2f_lw_RVALID            : in    std_logic                     := 'X';             -- rvalid
-			h2f_lw_RREADY            : out   std_logic                                         -- rready
+			mem_a                  : out   std_logic_vector(14 downto 0);                    -- mem_a
+			mem_ba                 : out   std_logic_vector(2 downto 0);                     -- mem_ba
+			mem_ck                 : out   std_logic;                                        -- mem_ck
+			mem_ck_n               : out   std_logic;                                        -- mem_ck_n
+			mem_cke                : out   std_logic;                                        -- mem_cke
+			mem_cs_n               : out   std_logic;                                        -- mem_cs_n
+			mem_ras_n              : out   std_logic;                                        -- mem_ras_n
+			mem_cas_n              : out   std_logic;                                        -- mem_cas_n
+			mem_we_n               : out   std_logic;                                        -- mem_we_n
+			mem_reset_n            : out   std_logic;                                        -- mem_reset_n
+			mem_dq                 : inout std_logic_vector(31 downto 0) := (others => 'X'); -- mem_dq
+			mem_dqs                : inout std_logic_vector(3 downto 0)  := (others => 'X'); -- mem_dqs
+			mem_dqs_n              : inout std_logic_vector(3 downto 0)  := (others => 'X'); -- mem_dqs_n
+			mem_odt                : out   std_logic;                                        -- mem_odt
+			mem_dm                 : out   std_logic_vector(3 downto 0);                     -- mem_dm
+			oct_rzqin              : in    std_logic                     := 'X';             -- oct_rzqin
+			h2f_rst_n              : out   std_logic;                                        -- reset_n
+			f2h_sdram0_clk         : in    std_logic                     := 'X';             -- clk
+			f2h_sdram0_ADDRESS     : in    std_logic_vector(28 downto 0) := (others => 'X'); -- address
+			f2h_sdram0_BURSTCOUNT  : in    std_logic_vector(7 downto 0)  := (others => 'X'); -- burstcount
+			f2h_sdram0_WAITREQUEST : out   std_logic;                                        -- waitrequest
+			f2h_sdram0_WRITEDATA   : in    std_logic_vector(63 downto 0) := (others => 'X'); -- writedata
+			f2h_sdram0_BYTEENABLE  : in    std_logic_vector(7 downto 0)  := (others => 'X'); -- byteenable
+			f2h_sdram0_WRITE       : in    std_logic                     := 'X';             -- write
+			h2f_lw_axi_clk         : in    std_logic                     := 'X';             -- clk
+			h2f_lw_AWID            : out   std_logic_vector(11 downto 0);                    -- awid
+			h2f_lw_AWADDR          : out   std_logic_vector(20 downto 0);                    -- awaddr
+			h2f_lw_AWLEN           : out   std_logic_vector(3 downto 0);                     -- awlen
+			h2f_lw_AWSIZE          : out   std_logic_vector(2 downto 0);                     -- awsize
+			h2f_lw_AWBURST         : out   std_logic_vector(1 downto 0);                     -- awburst
+			h2f_lw_AWLOCK          : out   std_logic_vector(1 downto 0);                     -- awlock
+			h2f_lw_AWCACHE         : out   std_logic_vector(3 downto 0);                     -- awcache
+			h2f_lw_AWPROT          : out   std_logic_vector(2 downto 0);                     -- awprot
+			h2f_lw_AWVALID         : out   std_logic;                                        -- awvalid
+			h2f_lw_AWREADY         : in    std_logic                     := 'X';             -- awready
+			h2f_lw_WID             : out   std_logic_vector(11 downto 0);                    -- wid
+			h2f_lw_WDATA           : out   std_logic_vector(31 downto 0);                    -- wdata
+			h2f_lw_WSTRB           : out   std_logic_vector(3 downto 0);                     -- wstrb
+			h2f_lw_WLAST           : out   std_logic;                                        -- wlast
+			h2f_lw_WVALID          : out   std_logic;                                        -- wvalid
+			h2f_lw_WREADY          : in    std_logic                     := 'X';             -- wready
+			h2f_lw_BID             : in    std_logic_vector(11 downto 0) := (others => 'X'); -- bid
+			h2f_lw_BRESP           : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- bresp
+			h2f_lw_BVALID          : in    std_logic                     := 'X';             -- bvalid
+			h2f_lw_BREADY          : out   std_logic;                                        -- bready
+			h2f_lw_ARID            : out   std_logic_vector(11 downto 0);                    -- arid
+			h2f_lw_ARADDR          : out   std_logic_vector(20 downto 0);                    -- araddr
+			h2f_lw_ARLEN           : out   std_logic_vector(3 downto 0);                     -- arlen
+			h2f_lw_ARSIZE          : out   std_logic_vector(2 downto 0);                     -- arsize
+			h2f_lw_ARBURST         : out   std_logic_vector(1 downto 0);                     -- arburst
+			h2f_lw_ARLOCK          : out   std_logic_vector(1 downto 0);                     -- arlock
+			h2f_lw_ARCACHE         : out   std_logic_vector(3 downto 0);                     -- arcache
+			h2f_lw_ARPROT          : out   std_logic_vector(2 downto 0);                     -- arprot
+			h2f_lw_ARVALID         : out   std_logic;                                        -- arvalid
+			h2f_lw_ARREADY         : in    std_logic                     := 'X';             -- arready
+			h2f_lw_RID             : in    std_logic_vector(11 downto 0) := (others => 'X'); -- rid
+			h2f_lw_RDATA           : in    std_logic_vector(31 downto 0) := (others => 'X'); -- rdata
+			h2f_lw_RRESP           : in    std_logic_vector(1 downto 0)  := (others => 'X'); -- rresp
+			h2f_lw_RLAST           : in    std_logic                     := 'X';             -- rlast
+			h2f_lw_RVALID          : in    std_logic                     := 'X';             -- rvalid
+			h2f_lw_RREADY          : out   std_logic                                         -- rready
 		);
 	end component soc_hps_0;
+
+	component recCtrl is
+		port (
+			clk        : in  std_logic                    := 'X';             -- clk
+			reset      : in  std_logic                    := 'X';             -- reset
+			RecEnable  : out std_logic;                                       -- enrec
+			write_data : in  std_logic_vector(7 downto 0) := (others => 'X'); -- writedata
+			write_en   : in  std_logic                    := 'X'              -- write
+		);
+	end component recCtrl;
 
 	component soc_mm_interconnect_0 is
 		port (
 			clk_0_clk_clk                                                      : in  std_logic                     := 'X';             -- clk
 			hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset : in  std_logic                     := 'X';             -- reset
-			IData_read_master_Clock_reset_reset_bridge_in_reset_reset          : in  std_logic                     := 'X';             -- reset
-			IData_read_master_Data_Read_Master_address                         : in  std_logic_vector(31 downto 0) := (others => 'X'); -- address
-			IData_read_master_Data_Read_Master_waitrequest                     : out std_logic;                                        -- waitrequest
-			IData_read_master_Data_Read_Master_byteenable                      : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- byteenable
-			IData_read_master_Data_Read_Master_read                            : in  std_logic                     := 'X';             -- read
-			IData_read_master_Data_Read_Master_readdata                        : out std_logic_vector(15 downto 0);                    -- readdata
-			IData_read_master_Data_Read_Master_readdatavalid                   : out std_logic;                                        -- readdatavalid
-			QData_read_master_Data_Read_Master_address                         : in  std_logic_vector(31 downto 0) := (others => 'X'); -- address
-			QData_read_master_Data_Read_Master_waitrequest                     : out std_logic;                                        -- waitrequest
-			QData_read_master_Data_Read_Master_byteenable                      : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- byteenable
-			QData_read_master_Data_Read_Master_read                            : in  std_logic                     := 'X';             -- read
-			QData_read_master_Data_Read_Master_readdata                        : out std_logic_vector(15 downto 0);                    -- readdata
-			QData_read_master_Data_Read_Master_readdatavalid                   : out std_logic;                                        -- readdatavalid
+			IN_WRITE_MASTER_Clock_reset_reset_bridge_in_reset_reset            : in  std_logic                     := 'X';             -- reset
+			IN_WRITE_MASTER_Data_Write_Master_address                          : in  std_logic_vector(31 downto 0) := (others => 'X'); -- address
+			IN_WRITE_MASTER_Data_Write_Master_waitrequest                      : out std_logic;                                        -- waitrequest
+			IN_WRITE_MASTER_Data_Write_Master_byteenable                       : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- byteenable
+			IN_WRITE_MASTER_Data_Write_Master_write                            : in  std_logic                     := 'X';             -- write
+			IN_WRITE_MASTER_Data_Write_Master_writedata                        : in  std_logic_vector(15 downto 0) := (others => 'X'); -- writedata
+			QU_WRITE_MASTER_Data_Write_Master_address                          : in  std_logic_vector(31 downto 0) := (others => 'X'); -- address
+			QU_WRITE_MASTER_Data_Write_Master_waitrequest                      : out std_logic;                                        -- waitrequest
+			QU_WRITE_MASTER_Data_Write_Master_byteenable                       : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- byteenable
+			QU_WRITE_MASTER_Data_Write_Master_write                            : in  std_logic                     := 'X';             -- write
+			QU_WRITE_MASTER_Data_Write_Master_writedata                        : in  std_logic_vector(15 downto 0) := (others => 'X'); -- writedata
 			hps_0_f2h_sdram0_data_address                                      : out std_logic_vector(28 downto 0);                    -- address
-			hps_0_f2h_sdram0_data_read                                         : out std_logic;                                        -- read
-			hps_0_f2h_sdram0_data_readdata                                     : in  std_logic_vector(63 downto 0) := (others => 'X'); -- readdata
+			hps_0_f2h_sdram0_data_write                                        : out std_logic;                                        -- write
+			hps_0_f2h_sdram0_data_writedata                                    : out std_logic_vector(63 downto 0);                    -- writedata
 			hps_0_f2h_sdram0_data_burstcount                                   : out std_logic_vector(7 downto 0);                     -- burstcount
-			hps_0_f2h_sdram0_data_readdatavalid                                : in  std_logic                     := 'X';             -- readdatavalid
+			hps_0_f2h_sdram0_data_byteenable                                   : out std_logic_vector(7 downto 0);                     -- byteenable
 			hps_0_f2h_sdram0_data_waitrequest                                  : in  std_logic                     := 'X'              -- waitrequest
 		);
 	end component soc_mm_interconnect_0;
@@ -344,29 +341,29 @@ architecture rtl of soc is
 			hps_0_h2f_lw_axi_master_rready                                      : in  std_logic                      := 'X';             -- rready
 			clk_0_clk_clk                                                       : in  std_logic                      := 'X';             -- clk
 			hps_0_h2f_lw_axi_master_agent_clk_reset_reset_bridge_in_reset_reset : in  std_logic                      := 'X';             -- reset
-			IData_read_dispatcher_clock_reset_reset_bridge_in_reset_reset       : in  std_logic                      := 'X';             -- reset
-			IData_read_dispatcher_CSR_address                                   : out std_logic_vector(2 downto 0);                      -- address
-			IData_read_dispatcher_CSR_write                                     : out std_logic;                                         -- write
-			IData_read_dispatcher_CSR_read                                      : out std_logic;                                         -- read
-			IData_read_dispatcher_CSR_readdata                                  : in  std_logic_vector(31 downto 0)  := (others => 'X'); -- readdata
-			IData_read_dispatcher_CSR_writedata                                 : out std_logic_vector(31 downto 0);                     -- writedata
-			IData_read_dispatcher_CSR_byteenable                                : out std_logic_vector(3 downto 0);                      -- byteenable
-			IData_read_dispatcher_Descriptor_Slave_write                        : out std_logic;                                         -- write
-			IData_read_dispatcher_Descriptor_Slave_writedata                    : out std_logic_vector(127 downto 0);                    -- writedata
-			IData_read_dispatcher_Descriptor_Slave_byteenable                   : out std_logic_vector(15 downto 0);                     -- byteenable
-			IData_read_dispatcher_Descriptor_Slave_waitrequest                  : in  std_logic                      := 'X';             -- waitrequest
-			QData_read_dispatcher_CSR_address                                   : out std_logic_vector(2 downto 0);                      -- address
-			QData_read_dispatcher_CSR_write                                     : out std_logic;                                         -- write
-			QData_read_dispatcher_CSR_read                                      : out std_logic;                                         -- read
-			QData_read_dispatcher_CSR_readdata                                  : in  std_logic_vector(31 downto 0)  := (others => 'X'); -- readdata
-			QData_read_dispatcher_CSR_writedata                                 : out std_logic_vector(31 downto 0);                     -- writedata
-			QData_read_dispatcher_CSR_byteenable                                : out std_logic_vector(3 downto 0);                      -- byteenable
-			QData_read_dispatcher_Descriptor_Slave_write                        : out std_logic;                                         -- write
-			QData_read_dispatcher_Descriptor_Slave_writedata                    : out std_logic_vector(127 downto 0);                    -- writedata
-			QData_read_dispatcher_Descriptor_Slave_byteenable                   : out std_logic_vector(15 downto 0);                     -- byteenable
-			QData_read_dispatcher_Descriptor_Slave_waitrequest                  : in  std_logic                      := 'X';             -- waitrequest
-			SendControl_SendCtrlMM_write                                        : out std_logic;                                         -- write
-			SendControl_SendCtrlMM_writedata                                    : out std_logic_vector(7 downto 0)                       -- writedata
+			IN_DISPATCHER_clock_reset_reset_bridge_in_reset_reset               : in  std_logic                      := 'X';             -- reset
+			IN_DISPATCHER_CSR_address                                           : out std_logic_vector(2 downto 0);                      -- address
+			IN_DISPATCHER_CSR_write                                             : out std_logic;                                         -- write
+			IN_DISPATCHER_CSR_read                                              : out std_logic;                                         -- read
+			IN_DISPATCHER_CSR_readdata                                          : in  std_logic_vector(31 downto 0)  := (others => 'X'); -- readdata
+			IN_DISPATCHER_CSR_writedata                                         : out std_logic_vector(31 downto 0);                     -- writedata
+			IN_DISPATCHER_CSR_byteenable                                        : out std_logic_vector(3 downto 0);                      -- byteenable
+			IN_DISPATCHER_Descriptor_Slave_write                                : out std_logic;                                         -- write
+			IN_DISPATCHER_Descriptor_Slave_writedata                            : out std_logic_vector(127 downto 0);                    -- writedata
+			IN_DISPATCHER_Descriptor_Slave_byteenable                           : out std_logic_vector(15 downto 0);                     -- byteenable
+			IN_DISPATCHER_Descriptor_Slave_waitrequest                          : in  std_logic                      := 'X';             -- waitrequest
+			QU_DISPATCHER_CSR_address                                           : out std_logic_vector(2 downto 0);                      -- address
+			QU_DISPATCHER_CSR_write                                             : out std_logic;                                         -- write
+			QU_DISPATCHER_CSR_read                                              : out std_logic;                                         -- read
+			QU_DISPATCHER_CSR_readdata                                          : in  std_logic_vector(31 downto 0)  := (others => 'X'); -- readdata
+			QU_DISPATCHER_CSR_writedata                                         : out std_logic_vector(31 downto 0);                     -- writedata
+			QU_DISPATCHER_CSR_byteenable                                        : out std_logic_vector(3 downto 0);                      -- byteenable
+			QU_DISPATCHER_Descriptor_Slave_write                                : out std_logic;                                         -- write
+			QU_DISPATCHER_Descriptor_Slave_writedata                            : out std_logic_vector(127 downto 0);                    -- writedata
+			QU_DISPATCHER_Descriptor_Slave_byteenable                           : out std_logic_vector(15 downto 0);                     -- byteenable
+			QU_DISPATCHER_Descriptor_Slave_waitrequest                          : in  std_logic                      := 'X';             -- waitrequest
+			recCtrl_0_recCtrlMM_write                                           : out std_logic;                                         -- write
+			recCtrl_0_recCtrlMM_writedata                                       : out std_logic_vector(7 downto 0)                       -- writedata
 		);
 	end component soc_mm_interconnect_1;
 
@@ -436,122 +433,120 @@ architecture rtl of soc is
 		);
 	end component altera_reset_controller;
 
-	signal idata_read_master_data_source_valid                                  : std_logic;                      -- IData_read_master:src_valid -> IData_FIFO:in_valid
-	signal idata_read_master_data_source_data                                   : std_logic_vector(15 downto 0);  -- IData_read_master:src_data -> IData_FIFO:in_data
-	signal idata_read_master_data_source_ready                                  : std_logic;                      -- IData_FIFO:in_ready -> IData_read_master:src_ready
-	signal qdata_read_master_data_source_valid                                  : std_logic;                      -- QData_read_master:src_valid -> QData_FIFO:in_valid
-	signal qdata_read_master_data_source_data                                   : std_logic_vector(15 downto 0);  -- QData_read_master:src_data -> QData_FIFO:in_data
-	signal qdata_read_master_data_source_ready                                  : std_logic;                      -- QData_FIFO:in_ready -> QData_read_master:src_ready
-	signal idata_read_dispatcher_read_command_source_valid                      : std_logic;                      -- IData_read_dispatcher:src_read_master_valid -> IData_read_master:snk_command_valid
-	signal idata_read_dispatcher_read_command_source_data                       : std_logic_vector(255 downto 0); -- IData_read_dispatcher:src_read_master_data -> IData_read_master:snk_command_data
-	signal idata_read_dispatcher_read_command_source_ready                      : std_logic;                      -- IData_read_master:snk_command_ready -> IData_read_dispatcher:src_read_master_ready
-	signal qdata_read_dispatcher_read_command_source_valid                      : std_logic;                      -- QData_read_dispatcher:src_read_master_valid -> QData_read_master:snk_command_valid
-	signal qdata_read_dispatcher_read_command_source_data                       : std_logic_vector(255 downto 0); -- QData_read_dispatcher:src_read_master_data -> QData_read_master:snk_command_data
-	signal qdata_read_dispatcher_read_command_source_ready                      : std_logic;                      -- QData_read_master:snk_command_ready -> QData_read_dispatcher:src_read_master_ready
-	signal idata_read_master_response_source_valid                              : std_logic;                      -- IData_read_master:src_response_valid -> IData_read_dispatcher:snk_read_master_valid
-	signal idata_read_master_response_source_data                               : std_logic_vector(255 downto 0); -- IData_read_master:src_response_data -> IData_read_dispatcher:snk_read_master_data
-	signal idata_read_master_response_source_ready                              : std_logic;                      -- IData_read_dispatcher:snk_read_master_ready -> IData_read_master:src_response_ready
-	signal qdata_read_master_response_source_valid                              : std_logic;                      -- QData_read_master:src_response_valid -> QData_read_dispatcher:snk_read_master_valid
-	signal qdata_read_master_response_source_data                               : std_logic_vector(255 downto 0); -- QData_read_master:src_response_data -> QData_read_dispatcher:snk_read_master_data
-	signal qdata_read_master_response_source_ready                              : std_logic;                      -- QData_read_dispatcher:snk_read_master_ready -> QData_read_master:src_response_ready
-	signal idata_fifo_out_valid                                                 : std_logic;                      -- IData_FIFO:out_valid -> RFSend_0:rfSend_i_valid
-	signal idata_fifo_out_data                                                  : std_logic_vector(15 downto 0);  -- IData_FIFO:out_data -> RFSend_0:rfSend_i_data
-	signal idata_fifo_out_ready                                                 : std_logic;                      -- RFSend_0:rfSend_i_ready -> IData_FIFO:out_ready
-	signal qdata_fifo_out_valid                                                 : std_logic;                      -- QData_FIFO:out_valid -> RFSend_0:rfSend_q_valid
-	signal qdata_fifo_out_data                                                  : std_logic_vector(15 downto 0);  -- QData_FIFO:out_data -> RFSend_0:rfSend_q_data
-	signal qdata_fifo_out_ready                                                 : std_logic;                      -- RFSend_0:rfSend_q_ready -> QData_FIFO:out_ready
-	signal rfsend_0_idatafifoclk_clk                                            : std_logic;                      -- RFSend_0:rfSend_i_clk -> [IData_FIFO:out_clk, rst_controller_001:clk]
-	signal rfsend_0_qdatafifoclk_clk                                            : std_logic;                      -- RFSend_0:rfSend_q_clk -> [QData_FIFO:out_clk, rst_controller_002:clk]
-	signal idata_read_master_data_read_master_readdata                          : std_logic_vector(15 downto 0);  -- mm_interconnect_0:IData_read_master_Data_Read_Master_readdata -> IData_read_master:master_readdata
-	signal idata_read_master_data_read_master_waitrequest                       : std_logic;                      -- mm_interconnect_0:IData_read_master_Data_Read_Master_waitrequest -> IData_read_master:master_waitrequest
-	signal idata_read_master_data_read_master_address                           : std_logic_vector(31 downto 0);  -- IData_read_master:master_address -> mm_interconnect_0:IData_read_master_Data_Read_Master_address
-	signal idata_read_master_data_read_master_read                              : std_logic;                      -- IData_read_master:master_read -> mm_interconnect_0:IData_read_master_Data_Read_Master_read
-	signal idata_read_master_data_read_master_byteenable                        : std_logic_vector(1 downto 0);   -- IData_read_master:master_byteenable -> mm_interconnect_0:IData_read_master_Data_Read_Master_byteenable
-	signal idata_read_master_data_read_master_readdatavalid                     : std_logic;                      -- mm_interconnect_0:IData_read_master_Data_Read_Master_readdatavalid -> IData_read_master:master_readdatavalid
-	signal qdata_read_master_data_read_master_readdata                          : std_logic_vector(15 downto 0);  -- mm_interconnect_0:QData_read_master_Data_Read_Master_readdata -> QData_read_master:master_readdata
-	signal qdata_read_master_data_read_master_waitrequest                       : std_logic;                      -- mm_interconnect_0:QData_read_master_Data_Read_Master_waitrequest -> QData_read_master:master_waitrequest
-	signal qdata_read_master_data_read_master_address                           : std_logic_vector(31 downto 0);  -- QData_read_master:master_address -> mm_interconnect_0:QData_read_master_Data_Read_Master_address
-	signal qdata_read_master_data_read_master_read                              : std_logic;                      -- QData_read_master:master_read -> mm_interconnect_0:QData_read_master_Data_Read_Master_read
-	signal qdata_read_master_data_read_master_byteenable                        : std_logic_vector(1 downto 0);   -- QData_read_master:master_byteenable -> mm_interconnect_0:QData_read_master_Data_Read_Master_byteenable
-	signal qdata_read_master_data_read_master_readdatavalid                     : std_logic;                      -- mm_interconnect_0:QData_read_master_Data_Read_Master_readdatavalid -> QData_read_master:master_readdatavalid
-	signal mm_interconnect_0_hps_0_f2h_sdram0_data_readdata                     : std_logic_vector(63 downto 0);  -- hps_0:f2h_sdram0_READDATA -> mm_interconnect_0:hps_0_f2h_sdram0_data_readdata
-	signal mm_interconnect_0_hps_0_f2h_sdram0_data_waitrequest                  : std_logic;                      -- hps_0:f2h_sdram0_WAITREQUEST -> mm_interconnect_0:hps_0_f2h_sdram0_data_waitrequest
-	signal mm_interconnect_0_hps_0_f2h_sdram0_data_address                      : std_logic_vector(28 downto 0);  -- mm_interconnect_0:hps_0_f2h_sdram0_data_address -> hps_0:f2h_sdram0_ADDRESS
-	signal mm_interconnect_0_hps_0_f2h_sdram0_data_read                         : std_logic;                      -- mm_interconnect_0:hps_0_f2h_sdram0_data_read -> hps_0:f2h_sdram0_READ
-	signal mm_interconnect_0_hps_0_f2h_sdram0_data_readdatavalid                : std_logic;                      -- hps_0:f2h_sdram0_READDATAVALID -> mm_interconnect_0:hps_0_f2h_sdram0_data_readdatavalid
-	signal mm_interconnect_0_hps_0_f2h_sdram0_data_burstcount                   : std_logic_vector(7 downto 0);   -- mm_interconnect_0:hps_0_f2h_sdram0_data_burstcount -> hps_0:f2h_sdram0_BURSTCOUNT
-	signal hps_0_h2f_lw_axi_master_awburst                                      : std_logic_vector(1 downto 0);   -- hps_0:h2f_lw_AWBURST -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awburst
-	signal hps_0_h2f_lw_axi_master_arlen                                        : std_logic_vector(3 downto 0);   -- hps_0:h2f_lw_ARLEN -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arlen
-	signal hps_0_h2f_lw_axi_master_wstrb                                        : std_logic_vector(3 downto 0);   -- hps_0:h2f_lw_WSTRB -> mm_interconnect_1:hps_0_h2f_lw_axi_master_wstrb
-	signal hps_0_h2f_lw_axi_master_wready                                       : std_logic;                      -- mm_interconnect_1:hps_0_h2f_lw_axi_master_wready -> hps_0:h2f_lw_WREADY
-	signal hps_0_h2f_lw_axi_master_rid                                          : std_logic_vector(11 downto 0);  -- mm_interconnect_1:hps_0_h2f_lw_axi_master_rid -> hps_0:h2f_lw_RID
-	signal hps_0_h2f_lw_axi_master_rready                                       : std_logic;                      -- hps_0:h2f_lw_RREADY -> mm_interconnect_1:hps_0_h2f_lw_axi_master_rready
-	signal hps_0_h2f_lw_axi_master_awlen                                        : std_logic_vector(3 downto 0);   -- hps_0:h2f_lw_AWLEN -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awlen
-	signal hps_0_h2f_lw_axi_master_wid                                          : std_logic_vector(11 downto 0);  -- hps_0:h2f_lw_WID -> mm_interconnect_1:hps_0_h2f_lw_axi_master_wid
-	signal hps_0_h2f_lw_axi_master_arcache                                      : std_logic_vector(3 downto 0);   -- hps_0:h2f_lw_ARCACHE -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arcache
-	signal hps_0_h2f_lw_axi_master_wvalid                                       : std_logic;                      -- hps_0:h2f_lw_WVALID -> mm_interconnect_1:hps_0_h2f_lw_axi_master_wvalid
-	signal hps_0_h2f_lw_axi_master_araddr                                       : std_logic_vector(20 downto 0);  -- hps_0:h2f_lw_ARADDR -> mm_interconnect_1:hps_0_h2f_lw_axi_master_araddr
-	signal hps_0_h2f_lw_axi_master_arprot                                       : std_logic_vector(2 downto 0);   -- hps_0:h2f_lw_ARPROT -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arprot
-	signal hps_0_h2f_lw_axi_master_awprot                                       : std_logic_vector(2 downto 0);   -- hps_0:h2f_lw_AWPROT -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awprot
-	signal hps_0_h2f_lw_axi_master_wdata                                        : std_logic_vector(31 downto 0);  -- hps_0:h2f_lw_WDATA -> mm_interconnect_1:hps_0_h2f_lw_axi_master_wdata
-	signal hps_0_h2f_lw_axi_master_arvalid                                      : std_logic;                      -- hps_0:h2f_lw_ARVALID -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arvalid
-	signal hps_0_h2f_lw_axi_master_awcache                                      : std_logic_vector(3 downto 0);   -- hps_0:h2f_lw_AWCACHE -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awcache
-	signal hps_0_h2f_lw_axi_master_arid                                         : std_logic_vector(11 downto 0);  -- hps_0:h2f_lw_ARID -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arid
-	signal hps_0_h2f_lw_axi_master_arlock                                       : std_logic_vector(1 downto 0);   -- hps_0:h2f_lw_ARLOCK -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arlock
-	signal hps_0_h2f_lw_axi_master_awlock                                       : std_logic_vector(1 downto 0);   -- hps_0:h2f_lw_AWLOCK -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awlock
-	signal hps_0_h2f_lw_axi_master_awaddr                                       : std_logic_vector(20 downto 0);  -- hps_0:h2f_lw_AWADDR -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awaddr
-	signal hps_0_h2f_lw_axi_master_bresp                                        : std_logic_vector(1 downto 0);   -- mm_interconnect_1:hps_0_h2f_lw_axi_master_bresp -> hps_0:h2f_lw_BRESP
-	signal hps_0_h2f_lw_axi_master_arready                                      : std_logic;                      -- mm_interconnect_1:hps_0_h2f_lw_axi_master_arready -> hps_0:h2f_lw_ARREADY
-	signal hps_0_h2f_lw_axi_master_rdata                                        : std_logic_vector(31 downto 0);  -- mm_interconnect_1:hps_0_h2f_lw_axi_master_rdata -> hps_0:h2f_lw_RDATA
-	signal hps_0_h2f_lw_axi_master_awready                                      : std_logic;                      -- mm_interconnect_1:hps_0_h2f_lw_axi_master_awready -> hps_0:h2f_lw_AWREADY
-	signal hps_0_h2f_lw_axi_master_arburst                                      : std_logic_vector(1 downto 0);   -- hps_0:h2f_lw_ARBURST -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arburst
-	signal hps_0_h2f_lw_axi_master_arsize                                       : std_logic_vector(2 downto 0);   -- hps_0:h2f_lw_ARSIZE -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arsize
-	signal hps_0_h2f_lw_axi_master_bready                                       : std_logic;                      -- hps_0:h2f_lw_BREADY -> mm_interconnect_1:hps_0_h2f_lw_axi_master_bready
-	signal hps_0_h2f_lw_axi_master_rlast                                        : std_logic;                      -- mm_interconnect_1:hps_0_h2f_lw_axi_master_rlast -> hps_0:h2f_lw_RLAST
-	signal hps_0_h2f_lw_axi_master_wlast                                        : std_logic;                      -- hps_0:h2f_lw_WLAST -> mm_interconnect_1:hps_0_h2f_lw_axi_master_wlast
-	signal hps_0_h2f_lw_axi_master_rresp                                        : std_logic_vector(1 downto 0);   -- mm_interconnect_1:hps_0_h2f_lw_axi_master_rresp -> hps_0:h2f_lw_RRESP
-	signal hps_0_h2f_lw_axi_master_awid                                         : std_logic_vector(11 downto 0);  -- hps_0:h2f_lw_AWID -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awid
-	signal hps_0_h2f_lw_axi_master_bid                                          : std_logic_vector(11 downto 0);  -- mm_interconnect_1:hps_0_h2f_lw_axi_master_bid -> hps_0:h2f_lw_BID
-	signal hps_0_h2f_lw_axi_master_bvalid                                       : std_logic;                      -- mm_interconnect_1:hps_0_h2f_lw_axi_master_bvalid -> hps_0:h2f_lw_BVALID
-	signal hps_0_h2f_lw_axi_master_awsize                                       : std_logic_vector(2 downto 0);   -- hps_0:h2f_lw_AWSIZE -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awsize
-	signal hps_0_h2f_lw_axi_master_awvalid                                      : std_logic;                      -- hps_0:h2f_lw_AWVALID -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awvalid
-	signal hps_0_h2f_lw_axi_master_rvalid                                       : std_logic;                      -- mm_interconnect_1:hps_0_h2f_lw_axi_master_rvalid -> hps_0:h2f_lw_RVALID
-	signal mm_interconnect_1_idata_read_dispatcher_csr_readdata                 : std_logic_vector(31 downto 0);  -- IData_read_dispatcher:csr_readdata -> mm_interconnect_1:IData_read_dispatcher_CSR_readdata
-	signal mm_interconnect_1_idata_read_dispatcher_csr_address                  : std_logic_vector(2 downto 0);   -- mm_interconnect_1:IData_read_dispatcher_CSR_address -> IData_read_dispatcher:csr_address
-	signal mm_interconnect_1_idata_read_dispatcher_csr_read                     : std_logic;                      -- mm_interconnect_1:IData_read_dispatcher_CSR_read -> IData_read_dispatcher:csr_read
-	signal mm_interconnect_1_idata_read_dispatcher_csr_byteenable               : std_logic_vector(3 downto 0);   -- mm_interconnect_1:IData_read_dispatcher_CSR_byteenable -> IData_read_dispatcher:csr_byteenable
-	signal mm_interconnect_1_idata_read_dispatcher_csr_write                    : std_logic;                      -- mm_interconnect_1:IData_read_dispatcher_CSR_write -> IData_read_dispatcher:csr_write
-	signal mm_interconnect_1_idata_read_dispatcher_csr_writedata                : std_logic_vector(31 downto 0);  -- mm_interconnect_1:IData_read_dispatcher_CSR_writedata -> IData_read_dispatcher:csr_writedata
-	signal mm_interconnect_1_qdata_read_dispatcher_csr_readdata                 : std_logic_vector(31 downto 0);  -- QData_read_dispatcher:csr_readdata -> mm_interconnect_1:QData_read_dispatcher_CSR_readdata
-	signal mm_interconnect_1_qdata_read_dispatcher_csr_address                  : std_logic_vector(2 downto 0);   -- mm_interconnect_1:QData_read_dispatcher_CSR_address -> QData_read_dispatcher:csr_address
-	signal mm_interconnect_1_qdata_read_dispatcher_csr_read                     : std_logic;                      -- mm_interconnect_1:QData_read_dispatcher_CSR_read -> QData_read_dispatcher:csr_read
-	signal mm_interconnect_1_qdata_read_dispatcher_csr_byteenable               : std_logic_vector(3 downto 0);   -- mm_interconnect_1:QData_read_dispatcher_CSR_byteenable -> QData_read_dispatcher:csr_byteenable
-	signal mm_interconnect_1_qdata_read_dispatcher_csr_write                    : std_logic;                      -- mm_interconnect_1:QData_read_dispatcher_CSR_write -> QData_read_dispatcher:csr_write
-	signal mm_interconnect_1_qdata_read_dispatcher_csr_writedata                : std_logic_vector(31 downto 0);  -- mm_interconnect_1:QData_read_dispatcher_CSR_writedata -> QData_read_dispatcher:csr_writedata
-	signal mm_interconnect_1_idata_read_dispatcher_descriptor_slave_waitrequest : std_logic;                      -- IData_read_dispatcher:descriptor_waitrequest -> mm_interconnect_1:IData_read_dispatcher_Descriptor_Slave_waitrequest
-	signal mm_interconnect_1_idata_read_dispatcher_descriptor_slave_byteenable  : std_logic_vector(15 downto 0);  -- mm_interconnect_1:IData_read_dispatcher_Descriptor_Slave_byteenable -> IData_read_dispatcher:descriptor_byteenable
-	signal mm_interconnect_1_idata_read_dispatcher_descriptor_slave_write       : std_logic;                      -- mm_interconnect_1:IData_read_dispatcher_Descriptor_Slave_write -> IData_read_dispatcher:descriptor_write
-	signal mm_interconnect_1_idata_read_dispatcher_descriptor_slave_writedata   : std_logic_vector(127 downto 0); -- mm_interconnect_1:IData_read_dispatcher_Descriptor_Slave_writedata -> IData_read_dispatcher:descriptor_writedata
-	signal mm_interconnect_1_qdata_read_dispatcher_descriptor_slave_waitrequest : std_logic;                      -- QData_read_dispatcher:descriptor_waitrequest -> mm_interconnect_1:QData_read_dispatcher_Descriptor_Slave_waitrequest
-	signal mm_interconnect_1_qdata_read_dispatcher_descriptor_slave_byteenable  : std_logic_vector(15 downto 0);  -- mm_interconnect_1:QData_read_dispatcher_Descriptor_Slave_byteenable -> QData_read_dispatcher:descriptor_byteenable
-	signal mm_interconnect_1_qdata_read_dispatcher_descriptor_slave_write       : std_logic;                      -- mm_interconnect_1:QData_read_dispatcher_Descriptor_Slave_write -> QData_read_dispatcher:descriptor_write
-	signal mm_interconnect_1_qdata_read_dispatcher_descriptor_slave_writedata   : std_logic_vector(127 downto 0); -- mm_interconnect_1:QData_read_dispatcher_Descriptor_Slave_writedata -> QData_read_dispatcher:descriptor_writedata
-	signal mm_interconnect_1_sendcontrol_sendctrlmm_write                       : std_logic;                      -- mm_interconnect_1:SendControl_SendCtrlMM_write -> SendControl:write_en
-	signal mm_interconnect_1_sendcontrol_sendctrlmm_writedata                   : std_logic_vector(7 downto 0);   -- mm_interconnect_1:SendControl_SendCtrlMM_writedata -> SendControl:write_data
-	signal rst_controller_reset_out_reset                                       : std_logic;                      -- rst_controller:reset_out -> [IData_read_dispatcher:reset, IData_read_master:reset, QData_read_dispatcher:reset, QData_read_master:reset, RFSend_0:reset, SendControl:reset, mm_interconnect_0:IData_read_master_Clock_reset_reset_bridge_in_reset_reset, mm_interconnect_1:IData_read_dispatcher_clock_reset_reset_bridge_in_reset_reset, rst_controller_reset_out_reset:in]
-	signal rst_controller_001_reset_out_reset                                   : std_logic;                      -- rst_controller_001:reset_out -> rst_controller_001_reset_out_reset:in
-	signal rst_controller_002_reset_out_reset                                   : std_logic;                      -- rst_controller_002:reset_out -> rst_controller_002_reset_out_reset:in
-	signal rst_controller_003_reset_out_reset                                   : std_logic;                      -- rst_controller_003:reset_out -> [mm_interconnect_0:hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset, mm_interconnect_1:hps_0_h2f_lw_axi_master_agent_clk_reset_reset_bridge_in_reset_reset]
-	signal hps_0_h2f_reset_reset                                                : std_logic;                      -- hps_0:h2f_rst_n -> hps_0_h2f_reset_reset:in
-	signal reset_reset_n_ports_inv                                              : std_logic;                      -- reset_reset_n:inv -> [rst_controller:reset_in0, rst_controller_001:reset_in0, rst_controller_002:reset_in0]
-	signal rst_controller_reset_out_reset_ports_inv                             : std_logic;                      -- rst_controller_reset_out_reset:inv -> [IData_FIFO:in_reset_n, QData_FIFO:in_reset_n]
-	signal rst_controller_001_reset_out_reset_ports_inv                         : std_logic;                      -- rst_controller_001_reset_out_reset:inv -> IData_FIFO:out_reset_n
-	signal rst_controller_002_reset_out_reset_ports_inv                         : std_logic;                      -- rst_controller_002_reset_out_reset:inv -> QData_FIFO:out_reset_n
-	signal hps_0_h2f_reset_reset_ports_inv                                      : std_logic;                      -- hps_0_h2f_reset_reset:inv -> rst_controller_003:reset_in0
+	signal rfreceive_0_idatafifo_valid                                  : std_logic;                      -- RFReceive_0:rfRec_i_valid -> IN_DATA_FIFO:in_valid
+	signal rfreceive_0_idatafifo_data                                   : std_logic_vector(15 downto 0);  -- RFReceive_0:rfRec_i_data -> IN_DATA_FIFO:in_data
+	signal rfreceive_0_idatafifo_ready                                  : std_logic;                      -- IN_DATA_FIFO:in_ready -> RFReceive_0:rfRec_i_ready
+	signal rfreceive_0_qdatafifo_valid                                  : std_logic;                      -- RFReceive_0:rfRec_q_valid -> QU_DATA_FIFO:in_valid
+	signal rfreceive_0_qdatafifo_data                                   : std_logic_vector(15 downto 0);  -- RFReceive_0:rfRec_q_data -> QU_DATA_FIFO:in_data
+	signal rfreceive_0_qdatafifo_ready                                  : std_logic;                      -- QU_DATA_FIFO:in_ready -> RFReceive_0:rfRec_q_ready
+	signal in_write_master_response_source_valid                        : std_logic;                      -- IN_WRITE_MASTER:src_response_valid -> IN_DISPATCHER:snk_write_master_valid
+	signal in_write_master_response_source_data                         : std_logic_vector(255 downto 0); -- IN_WRITE_MASTER:src_response_data -> IN_DISPATCHER:snk_write_master_data
+	signal in_write_master_response_source_ready                        : std_logic;                      -- IN_DISPATCHER:snk_write_master_ready -> IN_WRITE_MASTER:src_response_ready
+	signal qu_write_master_response_source_valid                        : std_logic;                      -- QU_WRITE_MASTER:src_response_valid -> QU_DISPATCHER:snk_write_master_valid
+	signal qu_write_master_response_source_data                         : std_logic_vector(255 downto 0); -- QU_WRITE_MASTER:src_response_data -> QU_DISPATCHER:snk_write_master_data
+	signal qu_write_master_response_source_ready                        : std_logic;                      -- QU_DISPATCHER:snk_write_master_ready -> QU_WRITE_MASTER:src_response_ready
+	signal in_dispatcher_write_command_source_valid                     : std_logic;                      -- IN_DISPATCHER:src_write_master_valid -> IN_WRITE_MASTER:snk_command_valid
+	signal in_dispatcher_write_command_source_data                      : std_logic_vector(255 downto 0); -- IN_DISPATCHER:src_write_master_data -> IN_WRITE_MASTER:snk_command_data
+	signal in_dispatcher_write_command_source_ready                     : std_logic;                      -- IN_WRITE_MASTER:snk_command_ready -> IN_DISPATCHER:src_write_master_ready
+	signal qu_dispatcher_write_command_source_valid                     : std_logic;                      -- QU_DISPATCHER:src_write_master_valid -> QU_WRITE_MASTER:snk_command_valid
+	signal qu_dispatcher_write_command_source_data                      : std_logic_vector(255 downto 0); -- QU_DISPATCHER:src_write_master_data -> QU_WRITE_MASTER:snk_command_data
+	signal qu_dispatcher_write_command_source_ready                     : std_logic;                      -- QU_WRITE_MASTER:snk_command_ready -> QU_DISPATCHER:src_write_master_ready
+	signal in_data_fifo_out_valid                                       : std_logic;                      -- IN_DATA_FIFO:out_valid -> IN_WRITE_MASTER:snk_valid
+	signal in_data_fifo_out_data                                        : std_logic_vector(15 downto 0);  -- IN_DATA_FIFO:out_data -> IN_WRITE_MASTER:snk_data
+	signal in_data_fifo_out_ready                                       : std_logic;                      -- IN_WRITE_MASTER:snk_ready -> IN_DATA_FIFO:out_ready
+	signal qu_data_fifo_out_valid                                       : std_logic;                      -- QU_DATA_FIFO:out_valid -> QU_WRITE_MASTER:snk_valid
+	signal qu_data_fifo_out_data                                        : std_logic_vector(15 downto 0);  -- QU_DATA_FIFO:out_data -> QU_WRITE_MASTER:snk_data
+	signal qu_data_fifo_out_ready                                       : std_logic;                      -- QU_WRITE_MASTER:snk_ready -> QU_DATA_FIFO:out_ready
+	signal rfreceive_0_idatafifoclk_clk                                 : std_logic;                      -- RFReceive_0:rfRec_i_clk -> [IN_DATA_FIFO:in_clk, rst_controller:clk]
+	signal rfreceive_0_qdatafifoclk_clk                                 : std_logic;                      -- RFReceive_0:rfRec_q_clk -> [QU_DATA_FIFO:in_clk, rst_controller_002:clk]
+	signal in_write_master_data_write_master_waitrequest                : std_logic;                      -- mm_interconnect_0:IN_WRITE_MASTER_Data_Write_Master_waitrequest -> IN_WRITE_MASTER:master_waitrequest
+	signal in_write_master_data_write_master_address                    : std_logic_vector(31 downto 0);  -- IN_WRITE_MASTER:master_address -> mm_interconnect_0:IN_WRITE_MASTER_Data_Write_Master_address
+	signal in_write_master_data_write_master_byteenable                 : std_logic_vector(1 downto 0);   -- IN_WRITE_MASTER:master_byteenable -> mm_interconnect_0:IN_WRITE_MASTER_Data_Write_Master_byteenable
+	signal in_write_master_data_write_master_write                      : std_logic;                      -- IN_WRITE_MASTER:master_write -> mm_interconnect_0:IN_WRITE_MASTER_Data_Write_Master_write
+	signal in_write_master_data_write_master_writedata                  : std_logic_vector(15 downto 0);  -- IN_WRITE_MASTER:master_writedata -> mm_interconnect_0:IN_WRITE_MASTER_Data_Write_Master_writedata
+	signal qu_write_master_data_write_master_waitrequest                : std_logic;                      -- mm_interconnect_0:QU_WRITE_MASTER_Data_Write_Master_waitrequest -> QU_WRITE_MASTER:master_waitrequest
+	signal qu_write_master_data_write_master_address                    : std_logic_vector(31 downto 0);  -- QU_WRITE_MASTER:master_address -> mm_interconnect_0:QU_WRITE_MASTER_Data_Write_Master_address
+	signal qu_write_master_data_write_master_byteenable                 : std_logic_vector(1 downto 0);   -- QU_WRITE_MASTER:master_byteenable -> mm_interconnect_0:QU_WRITE_MASTER_Data_Write_Master_byteenable
+	signal qu_write_master_data_write_master_write                      : std_logic;                      -- QU_WRITE_MASTER:master_write -> mm_interconnect_0:QU_WRITE_MASTER_Data_Write_Master_write
+	signal qu_write_master_data_write_master_writedata                  : std_logic_vector(15 downto 0);  -- QU_WRITE_MASTER:master_writedata -> mm_interconnect_0:QU_WRITE_MASTER_Data_Write_Master_writedata
+	signal mm_interconnect_0_hps_0_f2h_sdram0_data_waitrequest          : std_logic;                      -- hps_0:f2h_sdram0_WAITREQUEST -> mm_interconnect_0:hps_0_f2h_sdram0_data_waitrequest
+	signal mm_interconnect_0_hps_0_f2h_sdram0_data_address              : std_logic_vector(28 downto 0);  -- mm_interconnect_0:hps_0_f2h_sdram0_data_address -> hps_0:f2h_sdram0_ADDRESS
+	signal mm_interconnect_0_hps_0_f2h_sdram0_data_byteenable           : std_logic_vector(7 downto 0);   -- mm_interconnect_0:hps_0_f2h_sdram0_data_byteenable -> hps_0:f2h_sdram0_BYTEENABLE
+	signal mm_interconnect_0_hps_0_f2h_sdram0_data_write                : std_logic;                      -- mm_interconnect_0:hps_0_f2h_sdram0_data_write -> hps_0:f2h_sdram0_WRITE
+	signal mm_interconnect_0_hps_0_f2h_sdram0_data_writedata            : std_logic_vector(63 downto 0);  -- mm_interconnect_0:hps_0_f2h_sdram0_data_writedata -> hps_0:f2h_sdram0_WRITEDATA
+	signal mm_interconnect_0_hps_0_f2h_sdram0_data_burstcount           : std_logic_vector(7 downto 0);   -- mm_interconnect_0:hps_0_f2h_sdram0_data_burstcount -> hps_0:f2h_sdram0_BURSTCOUNT
+	signal hps_0_h2f_lw_axi_master_awburst                              : std_logic_vector(1 downto 0);   -- hps_0:h2f_lw_AWBURST -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awburst
+	signal hps_0_h2f_lw_axi_master_arlen                                : std_logic_vector(3 downto 0);   -- hps_0:h2f_lw_ARLEN -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arlen
+	signal hps_0_h2f_lw_axi_master_wstrb                                : std_logic_vector(3 downto 0);   -- hps_0:h2f_lw_WSTRB -> mm_interconnect_1:hps_0_h2f_lw_axi_master_wstrb
+	signal hps_0_h2f_lw_axi_master_wready                               : std_logic;                      -- mm_interconnect_1:hps_0_h2f_lw_axi_master_wready -> hps_0:h2f_lw_WREADY
+	signal hps_0_h2f_lw_axi_master_rid                                  : std_logic_vector(11 downto 0);  -- mm_interconnect_1:hps_0_h2f_lw_axi_master_rid -> hps_0:h2f_lw_RID
+	signal hps_0_h2f_lw_axi_master_rready                               : std_logic;                      -- hps_0:h2f_lw_RREADY -> mm_interconnect_1:hps_0_h2f_lw_axi_master_rready
+	signal hps_0_h2f_lw_axi_master_awlen                                : std_logic_vector(3 downto 0);   -- hps_0:h2f_lw_AWLEN -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awlen
+	signal hps_0_h2f_lw_axi_master_wid                                  : std_logic_vector(11 downto 0);  -- hps_0:h2f_lw_WID -> mm_interconnect_1:hps_0_h2f_lw_axi_master_wid
+	signal hps_0_h2f_lw_axi_master_arcache                              : std_logic_vector(3 downto 0);   -- hps_0:h2f_lw_ARCACHE -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arcache
+	signal hps_0_h2f_lw_axi_master_wvalid                               : std_logic;                      -- hps_0:h2f_lw_WVALID -> mm_interconnect_1:hps_0_h2f_lw_axi_master_wvalid
+	signal hps_0_h2f_lw_axi_master_araddr                               : std_logic_vector(20 downto 0);  -- hps_0:h2f_lw_ARADDR -> mm_interconnect_1:hps_0_h2f_lw_axi_master_araddr
+	signal hps_0_h2f_lw_axi_master_arprot                               : std_logic_vector(2 downto 0);   -- hps_0:h2f_lw_ARPROT -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arprot
+	signal hps_0_h2f_lw_axi_master_awprot                               : std_logic_vector(2 downto 0);   -- hps_0:h2f_lw_AWPROT -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awprot
+	signal hps_0_h2f_lw_axi_master_wdata                                : std_logic_vector(31 downto 0);  -- hps_0:h2f_lw_WDATA -> mm_interconnect_1:hps_0_h2f_lw_axi_master_wdata
+	signal hps_0_h2f_lw_axi_master_arvalid                              : std_logic;                      -- hps_0:h2f_lw_ARVALID -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arvalid
+	signal hps_0_h2f_lw_axi_master_awcache                              : std_logic_vector(3 downto 0);   -- hps_0:h2f_lw_AWCACHE -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awcache
+	signal hps_0_h2f_lw_axi_master_arid                                 : std_logic_vector(11 downto 0);  -- hps_0:h2f_lw_ARID -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arid
+	signal hps_0_h2f_lw_axi_master_arlock                               : std_logic_vector(1 downto 0);   -- hps_0:h2f_lw_ARLOCK -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arlock
+	signal hps_0_h2f_lw_axi_master_awlock                               : std_logic_vector(1 downto 0);   -- hps_0:h2f_lw_AWLOCK -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awlock
+	signal hps_0_h2f_lw_axi_master_awaddr                               : std_logic_vector(20 downto 0);  -- hps_0:h2f_lw_AWADDR -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awaddr
+	signal hps_0_h2f_lw_axi_master_bresp                                : std_logic_vector(1 downto 0);   -- mm_interconnect_1:hps_0_h2f_lw_axi_master_bresp -> hps_0:h2f_lw_BRESP
+	signal hps_0_h2f_lw_axi_master_arready                              : std_logic;                      -- mm_interconnect_1:hps_0_h2f_lw_axi_master_arready -> hps_0:h2f_lw_ARREADY
+	signal hps_0_h2f_lw_axi_master_rdata                                : std_logic_vector(31 downto 0);  -- mm_interconnect_1:hps_0_h2f_lw_axi_master_rdata -> hps_0:h2f_lw_RDATA
+	signal hps_0_h2f_lw_axi_master_awready                              : std_logic;                      -- mm_interconnect_1:hps_0_h2f_lw_axi_master_awready -> hps_0:h2f_lw_AWREADY
+	signal hps_0_h2f_lw_axi_master_arburst                              : std_logic_vector(1 downto 0);   -- hps_0:h2f_lw_ARBURST -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arburst
+	signal hps_0_h2f_lw_axi_master_arsize                               : std_logic_vector(2 downto 0);   -- hps_0:h2f_lw_ARSIZE -> mm_interconnect_1:hps_0_h2f_lw_axi_master_arsize
+	signal hps_0_h2f_lw_axi_master_bready                               : std_logic;                      -- hps_0:h2f_lw_BREADY -> mm_interconnect_1:hps_0_h2f_lw_axi_master_bready
+	signal hps_0_h2f_lw_axi_master_rlast                                : std_logic;                      -- mm_interconnect_1:hps_0_h2f_lw_axi_master_rlast -> hps_0:h2f_lw_RLAST
+	signal hps_0_h2f_lw_axi_master_wlast                                : std_logic;                      -- hps_0:h2f_lw_WLAST -> mm_interconnect_1:hps_0_h2f_lw_axi_master_wlast
+	signal hps_0_h2f_lw_axi_master_rresp                                : std_logic_vector(1 downto 0);   -- mm_interconnect_1:hps_0_h2f_lw_axi_master_rresp -> hps_0:h2f_lw_RRESP
+	signal hps_0_h2f_lw_axi_master_awid                                 : std_logic_vector(11 downto 0);  -- hps_0:h2f_lw_AWID -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awid
+	signal hps_0_h2f_lw_axi_master_bid                                  : std_logic_vector(11 downto 0);  -- mm_interconnect_1:hps_0_h2f_lw_axi_master_bid -> hps_0:h2f_lw_BID
+	signal hps_0_h2f_lw_axi_master_bvalid                               : std_logic;                      -- mm_interconnect_1:hps_0_h2f_lw_axi_master_bvalid -> hps_0:h2f_lw_BVALID
+	signal hps_0_h2f_lw_axi_master_awsize                               : std_logic_vector(2 downto 0);   -- hps_0:h2f_lw_AWSIZE -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awsize
+	signal hps_0_h2f_lw_axi_master_awvalid                              : std_logic;                      -- hps_0:h2f_lw_AWVALID -> mm_interconnect_1:hps_0_h2f_lw_axi_master_awvalid
+	signal hps_0_h2f_lw_axi_master_rvalid                               : std_logic;                      -- mm_interconnect_1:hps_0_h2f_lw_axi_master_rvalid -> hps_0:h2f_lw_RVALID
+	signal mm_interconnect_1_in_dispatcher_csr_readdata                 : std_logic_vector(31 downto 0);  -- IN_DISPATCHER:csr_readdata -> mm_interconnect_1:IN_DISPATCHER_CSR_readdata
+	signal mm_interconnect_1_in_dispatcher_csr_address                  : std_logic_vector(2 downto 0);   -- mm_interconnect_1:IN_DISPATCHER_CSR_address -> IN_DISPATCHER:csr_address
+	signal mm_interconnect_1_in_dispatcher_csr_read                     : std_logic;                      -- mm_interconnect_1:IN_DISPATCHER_CSR_read -> IN_DISPATCHER:csr_read
+	signal mm_interconnect_1_in_dispatcher_csr_byteenable               : std_logic_vector(3 downto 0);   -- mm_interconnect_1:IN_DISPATCHER_CSR_byteenable -> IN_DISPATCHER:csr_byteenable
+	signal mm_interconnect_1_in_dispatcher_csr_write                    : std_logic;                      -- mm_interconnect_1:IN_DISPATCHER_CSR_write -> IN_DISPATCHER:csr_write
+	signal mm_interconnect_1_in_dispatcher_csr_writedata                : std_logic_vector(31 downto 0);  -- mm_interconnect_1:IN_DISPATCHER_CSR_writedata -> IN_DISPATCHER:csr_writedata
+	signal mm_interconnect_1_qu_dispatcher_csr_readdata                 : std_logic_vector(31 downto 0);  -- QU_DISPATCHER:csr_readdata -> mm_interconnect_1:QU_DISPATCHER_CSR_readdata
+	signal mm_interconnect_1_qu_dispatcher_csr_address                  : std_logic_vector(2 downto 0);   -- mm_interconnect_1:QU_DISPATCHER_CSR_address -> QU_DISPATCHER:csr_address
+	signal mm_interconnect_1_qu_dispatcher_csr_read                     : std_logic;                      -- mm_interconnect_1:QU_DISPATCHER_CSR_read -> QU_DISPATCHER:csr_read
+	signal mm_interconnect_1_qu_dispatcher_csr_byteenable               : std_logic_vector(3 downto 0);   -- mm_interconnect_1:QU_DISPATCHER_CSR_byteenable -> QU_DISPATCHER:csr_byteenable
+	signal mm_interconnect_1_qu_dispatcher_csr_write                    : std_logic;                      -- mm_interconnect_1:QU_DISPATCHER_CSR_write -> QU_DISPATCHER:csr_write
+	signal mm_interconnect_1_qu_dispatcher_csr_writedata                : std_logic_vector(31 downto 0);  -- mm_interconnect_1:QU_DISPATCHER_CSR_writedata -> QU_DISPATCHER:csr_writedata
+	signal mm_interconnect_1_in_dispatcher_descriptor_slave_waitrequest : std_logic;                      -- IN_DISPATCHER:descriptor_waitrequest -> mm_interconnect_1:IN_DISPATCHER_Descriptor_Slave_waitrequest
+	signal mm_interconnect_1_in_dispatcher_descriptor_slave_byteenable  : std_logic_vector(15 downto 0);  -- mm_interconnect_1:IN_DISPATCHER_Descriptor_Slave_byteenable -> IN_DISPATCHER:descriptor_byteenable
+	signal mm_interconnect_1_in_dispatcher_descriptor_slave_write       : std_logic;                      -- mm_interconnect_1:IN_DISPATCHER_Descriptor_Slave_write -> IN_DISPATCHER:descriptor_write
+	signal mm_interconnect_1_in_dispatcher_descriptor_slave_writedata   : std_logic_vector(127 downto 0); -- mm_interconnect_1:IN_DISPATCHER_Descriptor_Slave_writedata -> IN_DISPATCHER:descriptor_writedata
+	signal mm_interconnect_1_qu_dispatcher_descriptor_slave_waitrequest : std_logic;                      -- QU_DISPATCHER:descriptor_waitrequest -> mm_interconnect_1:QU_DISPATCHER_Descriptor_Slave_waitrequest
+	signal mm_interconnect_1_qu_dispatcher_descriptor_slave_byteenable  : std_logic_vector(15 downto 0);  -- mm_interconnect_1:QU_DISPATCHER_Descriptor_Slave_byteenable -> QU_DISPATCHER:descriptor_byteenable
+	signal mm_interconnect_1_qu_dispatcher_descriptor_slave_write       : std_logic;                      -- mm_interconnect_1:QU_DISPATCHER_Descriptor_Slave_write -> QU_DISPATCHER:descriptor_write
+	signal mm_interconnect_1_qu_dispatcher_descriptor_slave_writedata   : std_logic_vector(127 downto 0); -- mm_interconnect_1:QU_DISPATCHER_Descriptor_Slave_writedata -> QU_DISPATCHER:descriptor_writedata
+	signal mm_interconnect_1_recctrl_0_recctrlmm_write                  : std_logic;                      -- mm_interconnect_1:recCtrl_0_recCtrlMM_write -> recCtrl_0:write_en
+	signal mm_interconnect_1_recctrl_0_recctrlmm_writedata              : std_logic_vector(7 downto 0);   -- mm_interconnect_1:recCtrl_0_recCtrlMM_writedata -> recCtrl_0:write_data
+	signal rst_controller_reset_out_reset                               : std_logic;                      -- rst_controller:reset_out -> rst_controller_reset_out_reset:in
+	signal rst_controller_001_reset_out_reset                           : std_logic;                      -- rst_controller_001:reset_out -> [IN_DISPATCHER:reset, IN_WRITE_MASTER:reset, QU_DISPATCHER:reset, QU_WRITE_MASTER:reset, RFReceive_0:reset, mm_interconnect_0:IN_WRITE_MASTER_Clock_reset_reset_bridge_in_reset_reset, mm_interconnect_1:IN_DISPATCHER_clock_reset_reset_bridge_in_reset_reset, recCtrl_0:reset, rst_controller_001_reset_out_reset:in]
+	signal rst_controller_002_reset_out_reset                           : std_logic;                      -- rst_controller_002:reset_out -> rst_controller_002_reset_out_reset:in
+	signal rst_controller_003_reset_out_reset                           : std_logic;                      -- rst_controller_003:reset_out -> [mm_interconnect_0:hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset, mm_interconnect_1:hps_0_h2f_lw_axi_master_agent_clk_reset_reset_bridge_in_reset_reset]
+	signal hps_0_h2f_reset_reset                                        : std_logic;                      -- hps_0:h2f_rst_n -> hps_0_h2f_reset_reset:in
+	signal reset_reset_n_ports_inv                                      : std_logic;                      -- reset_reset_n:inv -> [rst_controller:reset_in0, rst_controller_001:reset_in0, rst_controller_002:reset_in0]
+	signal rst_controller_reset_out_reset_ports_inv                     : std_logic;                      -- rst_controller_reset_out_reset:inv -> IN_DATA_FIFO:in_reset_n
+	signal rst_controller_001_reset_out_reset_ports_inv                 : std_logic;                      -- rst_controller_001_reset_out_reset:inv -> [IN_DATA_FIFO:out_reset_n, QU_DATA_FIFO:out_reset_n]
+	signal rst_controller_002_reset_out_reset_ports_inv                 : std_logic;                      -- rst_controller_002_reset_out_reset:inv -> QU_DATA_FIFO:in_reset_n
+	signal hps_0_h2f_reset_reset_ports_inv                              : std_logic;                      -- hps_0_h2f_reset_reset:inv -> rst_controller_003:reset_in0
 
 begin
 
-	idata_fifo : component altera_avalon_dc_fifo
+	in_data_fifo : component altera_avalon_dc_fifo
 		generic map (
 			SYMBOLS_PER_BEAT   => 2,
 			BITS_PER_SYMBOL    => 8,
@@ -565,16 +560,16 @@ begin
 			RD_SYNC_DEPTH      => 16
 		)
 		port map (
-			in_clk            => clk_clk,                                      --        in_clk.clk
+			in_clk            => rfreceive_0_idatafifoclk_clk,                 --        in_clk.clk
 			in_reset_n        => rst_controller_reset_out_reset_ports_inv,     --  in_clk_reset.reset_n
-			out_clk           => rfsend_0_idatafifoclk_clk,                    --       out_clk.clk
+			out_clk           => clk_clk,                                      --       out_clk.clk
 			out_reset_n       => rst_controller_001_reset_out_reset_ports_inv, -- out_clk_reset.reset_n
-			in_data           => idata_read_master_data_source_data,           --            in.data
-			in_valid          => idata_read_master_data_source_valid,          --              .valid
-			in_ready          => idata_read_master_data_source_ready,          --              .ready
-			out_data          => idata_fifo_out_data,                          --           out.data
-			out_valid         => idata_fifo_out_valid,                         --              .valid
-			out_ready         => idata_fifo_out_ready,                         --              .ready
+			in_data           => rfreceive_0_idatafifo_data,                   --            in.data
+			in_valid          => rfreceive_0_idatafifo_valid,                  --              .valid
+			in_ready          => rfreceive_0_idatafifo_ready,                  --              .ready
+			out_data          => in_data_fifo_out_data,                        --           out.data
+			out_valid         => in_data_fifo_out_valid,                       --              .valid
+			out_ready         => in_data_fifo_out_ready,                       --              .ready
 			in_csr_address    => '0',                                          --   (terminated)
 			in_csr_read       => '0',                                          --   (terminated)
 			in_csr_write      => '0',                                          --   (terminated)
@@ -591,9 +586,9 @@ begin
 			out_endofpacket   => open                                          --   (terminated)
 		);
 
-	idata_read_dispatcher : component dispatcher
+	in_dispatcher : component dispatcher
 		generic map (
-			MODE                        => 1,
+			MODE                        => 2,
 			RESPONSE_PORT               => 2,
 			DESCRIPTOR_FIFO_DEPTH       => 8,
 			ENHANCED_FEATURES           => 0,
@@ -601,96 +596,93 @@ begin
 			DESCRIPTOR_BYTEENABLE_WIDTH => 16
 		)
 		port map (
-			clk                     => clk_clk,                                                                                                                                                                                                                                                            --               clock.clk
-			reset                   => rst_controller_reset_out_reset,                                                                                                                                                                                                                                     --         clock_reset.reset
-			csr_writedata           => mm_interconnect_1_idata_read_dispatcher_csr_writedata,                                                                                                                                                                                                              --                 CSR.writedata
-			csr_write               => mm_interconnect_1_idata_read_dispatcher_csr_write,                                                                                                                                                                                                                  --                    .write
-			csr_byteenable          => mm_interconnect_1_idata_read_dispatcher_csr_byteenable,                                                                                                                                                                                                             --                    .byteenable
-			csr_readdata            => mm_interconnect_1_idata_read_dispatcher_csr_readdata,                                                                                                                                                                                                               --                    .readdata
-			csr_read                => mm_interconnect_1_idata_read_dispatcher_csr_read,                                                                                                                                                                                                                   --                    .read
-			csr_address             => mm_interconnect_1_idata_read_dispatcher_csr_address,                                                                                                                                                                                                                --                    .address
-			descriptor_write        => mm_interconnect_1_idata_read_dispatcher_descriptor_slave_write,                                                                                                                                                                                                     --    Descriptor_Slave.write
-			descriptor_waitrequest  => mm_interconnect_1_idata_read_dispatcher_descriptor_slave_waitrequest,                                                                                                                                                                                               --                    .waitrequest
-			descriptor_writedata    => mm_interconnect_1_idata_read_dispatcher_descriptor_slave_writedata,                                                                                                                                                                                                 --                    .writedata
-			descriptor_byteenable   => mm_interconnect_1_idata_read_dispatcher_descriptor_slave_byteenable,                                                                                                                                                                                                --                    .byteenable
-			src_read_master_data    => idata_read_dispatcher_read_command_source_data,                                                                                                                                                                                                                     -- Read_Command_Source.data
-			src_read_master_valid   => idata_read_dispatcher_read_command_source_valid,                                                                                                                                                                                                                    --                    .valid
-			src_read_master_ready   => idata_read_dispatcher_read_command_source_ready,                                                                                                                                                                                                                    --                    .ready
-			snk_read_master_data    => idata_read_master_response_source_data,                                                                                                                                                                                                                             --  Read_Response_Sink.data
-			snk_read_master_valid   => idata_read_master_response_source_valid,                                                                                                                                                                                                                            --                    .valid
-			snk_read_master_ready   => idata_read_master_response_source_ready,                                                                                                                                                                                                                            --                    .ready
-			csr_irq                 => open,                                                                                                                                                                                                                                                               --             csr_irq.irq
-			src_response_data       => open,                                                                                                                                                                                                                                                               --         (terminated)
-			src_response_valid      => open,                                                                                                                                                                                                                                                               --         (terminated)
-			src_response_ready      => '0',                                                                                                                                                                                                                                                                --         (terminated)
-			mm_response_waitrequest => open,                                                                                                                                                                                                                                                               --         (terminated)
-			mm_response_byteenable  => "0000",                                                                                                                                                                                                                                                             --         (terminated)
-			mm_response_address     => '0',                                                                                                                                                                                                                                                                --         (terminated)
-			mm_response_readdata    => open,                                                                                                                                                                                                                                                               --         (terminated)
-			mm_response_read        => '0',                                                                                                                                                                                                                                                                --         (terminated)
-			src_write_master_data   => open,                                                                                                                                                                                                                                                               --         (terminated)
-			src_write_master_valid  => open,                                                                                                                                                                                                                                                               --         (terminated)
-			src_write_master_ready  => '0',                                                                                                                                                                                                                                                                --         (terminated)
-			snk_write_master_data   => "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", --         (terminated)
-			snk_write_master_valid  => '0',                                                                                                                                                                                                                                                                --         (terminated)
-			snk_write_master_ready  => open                                                                                                                                                                                                                                                                --         (terminated)
+			clk                     => clk_clk,                                                                                                                                                                                                                                                            --                clock.clk
+			reset                   => rst_controller_001_reset_out_reset,                                                                                                                                                                                                                                 --          clock_reset.reset
+			csr_writedata           => mm_interconnect_1_in_dispatcher_csr_writedata,                                                                                                                                                                                                                      --                  CSR.writedata
+			csr_write               => mm_interconnect_1_in_dispatcher_csr_write,                                                                                                                                                                                                                          --                     .write
+			csr_byteenable          => mm_interconnect_1_in_dispatcher_csr_byteenable,                                                                                                                                                                                                                     --                     .byteenable
+			csr_readdata            => mm_interconnect_1_in_dispatcher_csr_readdata,                                                                                                                                                                                                                       --                     .readdata
+			csr_read                => mm_interconnect_1_in_dispatcher_csr_read,                                                                                                                                                                                                                           --                     .read
+			csr_address             => mm_interconnect_1_in_dispatcher_csr_address,                                                                                                                                                                                                                        --                     .address
+			descriptor_write        => mm_interconnect_1_in_dispatcher_descriptor_slave_write,                                                                                                                                                                                                             --     Descriptor_Slave.write
+			descriptor_waitrequest  => mm_interconnect_1_in_dispatcher_descriptor_slave_waitrequest,                                                                                                                                                                                                       --                     .waitrequest
+			descriptor_writedata    => mm_interconnect_1_in_dispatcher_descriptor_slave_writedata,                                                                                                                                                                                                         --                     .writedata
+			descriptor_byteenable   => mm_interconnect_1_in_dispatcher_descriptor_slave_byteenable,                                                                                                                                                                                                        --                     .byteenable
+			src_write_master_data   => in_dispatcher_write_command_source_data,                                                                                                                                                                                                                            -- Write_Command_Source.data
+			src_write_master_valid  => in_dispatcher_write_command_source_valid,                                                                                                                                                                                                                           --                     .valid
+			src_write_master_ready  => in_dispatcher_write_command_source_ready,                                                                                                                                                                                                                           --                     .ready
+			snk_write_master_data   => in_write_master_response_source_data,                                                                                                                                                                                                                               --  Write_Response_Sink.data
+			snk_write_master_valid  => in_write_master_response_source_valid,                                                                                                                                                                                                                              --                     .valid
+			snk_write_master_ready  => in_write_master_response_source_ready,                                                                                                                                                                                                                              --                     .ready
+			csr_irq                 => open,                                                                                                                                                                                                                                                               --              csr_irq.irq
+			src_response_data       => open,                                                                                                                                                                                                                                                               --          (terminated)
+			src_response_valid      => open,                                                                                                                                                                                                                                                               --          (terminated)
+			src_response_ready      => '0',                                                                                                                                                                                                                                                                --          (terminated)
+			mm_response_waitrequest => open,                                                                                                                                                                                                                                                               --          (terminated)
+			mm_response_byteenable  => "0000",                                                                                                                                                                                                                                                             --          (terminated)
+			mm_response_address     => '0',                                                                                                                                                                                                                                                                --          (terminated)
+			mm_response_readdata    => open,                                                                                                                                                                                                                                                               --          (terminated)
+			mm_response_read        => '0',                                                                                                                                                                                                                                                                --          (terminated)
+			src_read_master_data    => open,                                                                                                                                                                                                                                                               --          (terminated)
+			src_read_master_valid   => open,                                                                                                                                                                                                                                                               --          (terminated)
+			src_read_master_ready   => '0',                                                                                                                                                                                                                                                                --          (terminated)
+			snk_read_master_data    => "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", --          (terminated)
+			snk_read_master_valid   => '0',                                                                                                                                                                                                                                                                --          (terminated)
+			snk_read_master_ready   => open                                                                                                                                                                                                                                                                --          (terminated)
 		);
 
-	idata_read_master : component read_master
+	in_write_master : component write_master
 		generic map (
-			DATA_WIDTH                => 16,
-			LENGTH_WIDTH              => 32,
-			FIFO_DEPTH                => 128,
-			STRIDE_ENABLE             => 0,
-			BURST_ENABLE              => 0,
-			PACKET_ENABLE             => 0,
-			ERROR_ENABLE              => 0,
-			ERROR_WIDTH               => 8,
-			CHANNEL_ENABLE            => 0,
-			CHANNEL_WIDTH             => 8,
-			BYTE_ENABLE_WIDTH         => 2,
-			BYTE_ENABLE_WIDTH_LOG2    => 1,
-			ADDRESS_WIDTH             => 32,
-			FIFO_DEPTH_LOG2           => 7,
-			SYMBOL_WIDTH              => 8,
-			NUMBER_OF_SYMBOLS         => 2,
-			NUMBER_OF_SYMBOLS_LOG2    => 1,
-			MAX_BURST_COUNT_WIDTH     => 1,
-			UNALIGNED_ACCESSES_ENABLE => 0,
-			ONLY_FULL_ACCESS_ENABLE   => 0,
-			BURST_WRAPPING_SUPPORT    => 0,
-			PROGRAMMABLE_BURST_ENABLE => 0,
-			MAX_BURST_COUNT           => 1,
-			FIFO_SPEED_OPTIMIZATION   => 1,
-			STRIDE_WIDTH              => 1
+			DATA_WIDTH                     => 16,
+			LENGTH_WIDTH                   => 32,
+			FIFO_DEPTH                     => 128,
+			STRIDE_ENABLE                  => 0,
+			BURST_ENABLE                   => 0,
+			PACKET_ENABLE                  => 0,
+			ERROR_ENABLE                   => 0,
+			ERROR_WIDTH                    => 8,
+			BYTE_ENABLE_WIDTH              => 2,
+			BYTE_ENABLE_WIDTH_LOG2         => 1,
+			ADDRESS_WIDTH                  => 32,
+			FIFO_DEPTH_LOG2                => 7,
+			SYMBOL_WIDTH                   => 8,
+			NUMBER_OF_SYMBOLS              => 2,
+			NUMBER_OF_SYMBOLS_LOG2         => 1,
+			MAX_BURST_COUNT_WIDTH          => 1,
+			UNALIGNED_ACCESSES_ENABLE      => 0,
+			ONLY_FULL_ACCESS_ENABLE        => 0,
+			BURST_WRAPPING_SUPPORT         => 0,
+			PROGRAMMABLE_BURST_ENABLE      => 0,
+			MAX_BURST_COUNT                => 1,
+			FIFO_SPEED_OPTIMIZATION        => 1,
+			STRIDE_WIDTH                   => 1,
+			ACTUAL_BYTES_TRANSFERRED_WIDTH => 32
 		)
 		port map (
-			clk                  => clk_clk,                                          --            Clock.clk
-			reset                => rst_controller_reset_out_reset,                   --      Clock_reset.reset
-			master_address       => idata_read_master_data_read_master_address,       -- Data_Read_Master.address
-			master_read          => idata_read_master_data_read_master_read,          --                 .read
-			master_byteenable    => idata_read_master_data_read_master_byteenable,    --                 .byteenable
-			master_readdata      => idata_read_master_data_read_master_readdata,      --                 .readdata
-			master_waitrequest   => idata_read_master_data_read_master_waitrequest,   --                 .waitrequest
-			master_readdatavalid => idata_read_master_data_read_master_readdatavalid, --                 .readdatavalid
-			src_data             => idata_read_master_data_source_data,               --      Data_Source.data
-			src_valid            => idata_read_master_data_source_valid,              --                 .valid
-			src_ready            => idata_read_master_data_source_ready,              --                 .ready
-			snk_command_data     => idata_read_dispatcher_read_command_source_data,   --     Command_Sink.data
-			snk_command_valid    => idata_read_dispatcher_read_command_source_valid,  --                 .valid
-			snk_command_ready    => idata_read_dispatcher_read_command_source_ready,  --                 .ready
-			src_response_data    => idata_read_master_response_source_data,           --  Response_Source.data
-			src_response_valid   => idata_read_master_response_source_valid,          --                 .valid
-			src_response_ready   => idata_read_master_response_source_ready,          --                 .ready
-			master_burstcount    => open,                                             --      (terminated)
-			src_sop              => open,                                             --      (terminated)
-			src_eop              => open,                                             --      (terminated)
-			src_empty            => open,                                             --      (terminated)
-			src_error            => open,                                             --      (terminated)
-			src_channel          => open                                              --      (terminated)
+			clk                => clk_clk,                                       --             Clock.clk
+			reset              => rst_controller_001_reset_out_reset,            --       Clock_reset.reset
+			master_address     => in_write_master_data_write_master_address,     -- Data_Write_Master.address
+			master_write       => in_write_master_data_write_master_write,       --                  .write
+			master_byteenable  => in_write_master_data_write_master_byteenable,  --                  .byteenable
+			master_writedata   => in_write_master_data_write_master_writedata,   --                  .writedata
+			master_waitrequest => in_write_master_data_write_master_waitrequest, --                  .waitrequest
+			snk_data           => in_data_fifo_out_data,                         --         Data_Sink.data
+			snk_valid          => in_data_fifo_out_valid,                        --                  .valid
+			snk_ready          => in_data_fifo_out_ready,                        --                  .ready
+			snk_command_data   => in_dispatcher_write_command_source_data,       --      Command_Sink.data
+			snk_command_valid  => in_dispatcher_write_command_source_valid,      --                  .valid
+			snk_command_ready  => in_dispatcher_write_command_source_ready,      --                  .ready
+			src_response_data  => in_write_master_response_source_data,          --   Response_Source.data
+			src_response_valid => in_write_master_response_source_valid,         --                  .valid
+			src_response_ready => in_write_master_response_source_ready,         --                  .ready
+			master_burstcount  => open,                                          --       (terminated)
+			snk_sop            => '0',                                           --       (terminated)
+			snk_eop            => '0',                                           --       (terminated)
+			snk_empty          => '0',                                           --       (terminated)
+			snk_error          => "00000000"                                     --       (terminated)
 		);
 
-	qdata_fifo : component altera_avalon_dc_fifo
+	qu_data_fifo : component altera_avalon_dc_fifo
 		generic map (
 			SYMBOLS_PER_BEAT   => 2,
 			BITS_PER_SYMBOL    => 8,
@@ -704,16 +696,16 @@ begin
 			RD_SYNC_DEPTH      => 16
 		)
 		port map (
-			in_clk            => clk_clk,                                      --        in_clk.clk
-			in_reset_n        => rst_controller_reset_out_reset_ports_inv,     --  in_clk_reset.reset_n
-			out_clk           => rfsend_0_qdatafifoclk_clk,                    --       out_clk.clk
-			out_reset_n       => rst_controller_002_reset_out_reset_ports_inv, -- out_clk_reset.reset_n
-			in_data           => qdata_read_master_data_source_data,           --            in.data
-			in_valid          => qdata_read_master_data_source_valid,          --              .valid
-			in_ready          => qdata_read_master_data_source_ready,          --              .ready
-			out_data          => qdata_fifo_out_data,                          --           out.data
-			out_valid         => qdata_fifo_out_valid,                         --              .valid
-			out_ready         => qdata_fifo_out_ready,                         --              .ready
+			in_clk            => rfreceive_0_qdatafifoclk_clk,                 --        in_clk.clk
+			in_reset_n        => rst_controller_002_reset_out_reset_ports_inv, --  in_clk_reset.reset_n
+			out_clk           => clk_clk,                                      --       out_clk.clk
+			out_reset_n       => rst_controller_001_reset_out_reset_ports_inv, -- out_clk_reset.reset_n
+			in_data           => rfreceive_0_qdatafifo_data,                   --            in.data
+			in_valid          => rfreceive_0_qdatafifo_valid,                  --              .valid
+			in_ready          => rfreceive_0_qdatafifo_ready,                  --              .ready
+			out_data          => qu_data_fifo_out_data,                        --           out.data
+			out_valid         => qu_data_fifo_out_valid,                       --              .valid
+			out_ready         => qu_data_fifo_out_ready,                       --              .ready
 			in_csr_address    => '0',                                          --   (terminated)
 			in_csr_read       => '0',                                          --   (terminated)
 			in_csr_write      => '0',                                          --   (terminated)
@@ -730,9 +722,9 @@ begin
 			out_endofpacket   => open                                          --   (terminated)
 		);
 
-	qdata_read_dispatcher : component dispatcher
+	qu_dispatcher : component dispatcher
 		generic map (
-			MODE                        => 1,
+			MODE                        => 2,
 			RESPONSE_PORT               => 2,
 			DESCRIPTOR_FIFO_DEPTH       => 8,
 			ENHANCED_FEATURES           => 0,
@@ -740,121 +732,110 @@ begin
 			DESCRIPTOR_BYTEENABLE_WIDTH => 16
 		)
 		port map (
-			clk                     => clk_clk,                                                                                                                                                                                                                                                            --               clock.clk
-			reset                   => rst_controller_reset_out_reset,                                                                                                                                                                                                                                     --         clock_reset.reset
-			csr_writedata           => mm_interconnect_1_qdata_read_dispatcher_csr_writedata,                                                                                                                                                                                                              --                 CSR.writedata
-			csr_write               => mm_interconnect_1_qdata_read_dispatcher_csr_write,                                                                                                                                                                                                                  --                    .write
-			csr_byteenable          => mm_interconnect_1_qdata_read_dispatcher_csr_byteenable,                                                                                                                                                                                                             --                    .byteenable
-			csr_readdata            => mm_interconnect_1_qdata_read_dispatcher_csr_readdata,                                                                                                                                                                                                               --                    .readdata
-			csr_read                => mm_interconnect_1_qdata_read_dispatcher_csr_read,                                                                                                                                                                                                                   --                    .read
-			csr_address             => mm_interconnect_1_qdata_read_dispatcher_csr_address,                                                                                                                                                                                                                --                    .address
-			descriptor_write        => mm_interconnect_1_qdata_read_dispatcher_descriptor_slave_write,                                                                                                                                                                                                     --    Descriptor_Slave.write
-			descriptor_waitrequest  => mm_interconnect_1_qdata_read_dispatcher_descriptor_slave_waitrequest,                                                                                                                                                                                               --                    .waitrequest
-			descriptor_writedata    => mm_interconnect_1_qdata_read_dispatcher_descriptor_slave_writedata,                                                                                                                                                                                                 --                    .writedata
-			descriptor_byteenable   => mm_interconnect_1_qdata_read_dispatcher_descriptor_slave_byteenable,                                                                                                                                                                                                --                    .byteenable
-			src_read_master_data    => qdata_read_dispatcher_read_command_source_data,                                                                                                                                                                                                                     -- Read_Command_Source.data
-			src_read_master_valid   => qdata_read_dispatcher_read_command_source_valid,                                                                                                                                                                                                                    --                    .valid
-			src_read_master_ready   => qdata_read_dispatcher_read_command_source_ready,                                                                                                                                                                                                                    --                    .ready
-			snk_read_master_data    => qdata_read_master_response_source_data,                                                                                                                                                                                                                             --  Read_Response_Sink.data
-			snk_read_master_valid   => qdata_read_master_response_source_valid,                                                                                                                                                                                                                            --                    .valid
-			snk_read_master_ready   => qdata_read_master_response_source_ready,                                                                                                                                                                                                                            --                    .ready
-			csr_irq                 => open,                                                                                                                                                                                                                                                               --             csr_irq.irq
-			src_response_data       => open,                                                                                                                                                                                                                                                               --         (terminated)
-			src_response_valid      => open,                                                                                                                                                                                                                                                               --         (terminated)
-			src_response_ready      => '0',                                                                                                                                                                                                                                                                --         (terminated)
-			mm_response_waitrequest => open,                                                                                                                                                                                                                                                               --         (terminated)
-			mm_response_byteenable  => "0000",                                                                                                                                                                                                                                                             --         (terminated)
-			mm_response_address     => '0',                                                                                                                                                                                                                                                                --         (terminated)
-			mm_response_readdata    => open,                                                                                                                                                                                                                                                               --         (terminated)
-			mm_response_read        => '0',                                                                                                                                                                                                                                                                --         (terminated)
-			src_write_master_data   => open,                                                                                                                                                                                                                                                               --         (terminated)
-			src_write_master_valid  => open,                                                                                                                                                                                                                                                               --         (terminated)
-			src_write_master_ready  => '0',                                                                                                                                                                                                                                                                --         (terminated)
-			snk_write_master_data   => "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", --         (terminated)
-			snk_write_master_valid  => '0',                                                                                                                                                                                                                                                                --         (terminated)
-			snk_write_master_ready  => open                                                                                                                                                                                                                                                                --         (terminated)
+			clk                     => clk_clk,                                                                                                                                                                                                                                                            --                clock.clk
+			reset                   => rst_controller_001_reset_out_reset,                                                                                                                                                                                                                                 --          clock_reset.reset
+			csr_writedata           => mm_interconnect_1_qu_dispatcher_csr_writedata,                                                                                                                                                                                                                      --                  CSR.writedata
+			csr_write               => mm_interconnect_1_qu_dispatcher_csr_write,                                                                                                                                                                                                                          --                     .write
+			csr_byteenable          => mm_interconnect_1_qu_dispatcher_csr_byteenable,                                                                                                                                                                                                                     --                     .byteenable
+			csr_readdata            => mm_interconnect_1_qu_dispatcher_csr_readdata,                                                                                                                                                                                                                       --                     .readdata
+			csr_read                => mm_interconnect_1_qu_dispatcher_csr_read,                                                                                                                                                                                                                           --                     .read
+			csr_address             => mm_interconnect_1_qu_dispatcher_csr_address,                                                                                                                                                                                                                        --                     .address
+			descriptor_write        => mm_interconnect_1_qu_dispatcher_descriptor_slave_write,                                                                                                                                                                                                             --     Descriptor_Slave.write
+			descriptor_waitrequest  => mm_interconnect_1_qu_dispatcher_descriptor_slave_waitrequest,                                                                                                                                                                                                       --                     .waitrequest
+			descriptor_writedata    => mm_interconnect_1_qu_dispatcher_descriptor_slave_writedata,                                                                                                                                                                                                         --                     .writedata
+			descriptor_byteenable   => mm_interconnect_1_qu_dispatcher_descriptor_slave_byteenable,                                                                                                                                                                                                        --                     .byteenable
+			src_write_master_data   => qu_dispatcher_write_command_source_data,                                                                                                                                                                                                                            -- Write_Command_Source.data
+			src_write_master_valid  => qu_dispatcher_write_command_source_valid,                                                                                                                                                                                                                           --                     .valid
+			src_write_master_ready  => qu_dispatcher_write_command_source_ready,                                                                                                                                                                                                                           --                     .ready
+			snk_write_master_data   => qu_write_master_response_source_data,                                                                                                                                                                                                                               --  Write_Response_Sink.data
+			snk_write_master_valid  => qu_write_master_response_source_valid,                                                                                                                                                                                                                              --                     .valid
+			snk_write_master_ready  => qu_write_master_response_source_ready,                                                                                                                                                                                                                              --                     .ready
+			csr_irq                 => open,                                                                                                                                                                                                                                                               --              csr_irq.irq
+			src_response_data       => open,                                                                                                                                                                                                                                                               --          (terminated)
+			src_response_valid      => open,                                                                                                                                                                                                                                                               --          (terminated)
+			src_response_ready      => '0',                                                                                                                                                                                                                                                                --          (terminated)
+			mm_response_waitrequest => open,                                                                                                                                                                                                                                                               --          (terminated)
+			mm_response_byteenable  => "0000",                                                                                                                                                                                                                                                             --          (terminated)
+			mm_response_address     => '0',                                                                                                                                                                                                                                                                --          (terminated)
+			mm_response_readdata    => open,                                                                                                                                                                                                                                                               --          (terminated)
+			mm_response_read        => '0',                                                                                                                                                                                                                                                                --          (terminated)
+			src_read_master_data    => open,                                                                                                                                                                                                                                                               --          (terminated)
+			src_read_master_valid   => open,                                                                                                                                                                                                                                                               --          (terminated)
+			src_read_master_ready   => '0',                                                                                                                                                                                                                                                                --          (terminated)
+			snk_read_master_data    => "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", --          (terminated)
+			snk_read_master_valid   => '0',                                                                                                                                                                                                                                                                --          (terminated)
+			snk_read_master_ready   => open                                                                                                                                                                                                                                                                --          (terminated)
 		);
 
-	qdata_read_master : component read_master
+	qu_write_master : component write_master
 		generic map (
-			DATA_WIDTH                => 16,
-			LENGTH_WIDTH              => 32,
-			FIFO_DEPTH                => 128,
-			STRIDE_ENABLE             => 0,
-			BURST_ENABLE              => 0,
-			PACKET_ENABLE             => 0,
-			ERROR_ENABLE              => 0,
-			ERROR_WIDTH               => 8,
-			CHANNEL_ENABLE            => 0,
-			CHANNEL_WIDTH             => 8,
-			BYTE_ENABLE_WIDTH         => 2,
-			BYTE_ENABLE_WIDTH_LOG2    => 1,
-			ADDRESS_WIDTH             => 32,
-			FIFO_DEPTH_LOG2           => 7,
-			SYMBOL_WIDTH              => 8,
-			NUMBER_OF_SYMBOLS         => 2,
-			NUMBER_OF_SYMBOLS_LOG2    => 1,
-			MAX_BURST_COUNT_WIDTH     => 1,
-			UNALIGNED_ACCESSES_ENABLE => 0,
-			ONLY_FULL_ACCESS_ENABLE   => 0,
-			BURST_WRAPPING_SUPPORT    => 0,
-			PROGRAMMABLE_BURST_ENABLE => 0,
-			MAX_BURST_COUNT           => 1,
-			FIFO_SPEED_OPTIMIZATION   => 1,
-			STRIDE_WIDTH              => 1
+			DATA_WIDTH                     => 16,
+			LENGTH_WIDTH                   => 32,
+			FIFO_DEPTH                     => 128,
+			STRIDE_ENABLE                  => 0,
+			BURST_ENABLE                   => 0,
+			PACKET_ENABLE                  => 0,
+			ERROR_ENABLE                   => 0,
+			ERROR_WIDTH                    => 8,
+			BYTE_ENABLE_WIDTH              => 2,
+			BYTE_ENABLE_WIDTH_LOG2         => 1,
+			ADDRESS_WIDTH                  => 32,
+			FIFO_DEPTH_LOG2                => 7,
+			SYMBOL_WIDTH                   => 8,
+			NUMBER_OF_SYMBOLS              => 2,
+			NUMBER_OF_SYMBOLS_LOG2         => 1,
+			MAX_BURST_COUNT_WIDTH          => 1,
+			UNALIGNED_ACCESSES_ENABLE      => 0,
+			ONLY_FULL_ACCESS_ENABLE        => 0,
+			BURST_WRAPPING_SUPPORT         => 0,
+			PROGRAMMABLE_BURST_ENABLE      => 0,
+			MAX_BURST_COUNT                => 1,
+			FIFO_SPEED_OPTIMIZATION        => 1,
+			STRIDE_WIDTH                   => 1,
+			ACTUAL_BYTES_TRANSFERRED_WIDTH => 32
 		)
 		port map (
-			clk                  => clk_clk,                                          --            Clock.clk
-			reset                => rst_controller_reset_out_reset,                   --      Clock_reset.reset
-			master_address       => qdata_read_master_data_read_master_address,       -- Data_Read_Master.address
-			master_read          => qdata_read_master_data_read_master_read,          --                 .read
-			master_byteenable    => qdata_read_master_data_read_master_byteenable,    --                 .byteenable
-			master_readdata      => qdata_read_master_data_read_master_readdata,      --                 .readdata
-			master_waitrequest   => qdata_read_master_data_read_master_waitrequest,   --                 .waitrequest
-			master_readdatavalid => qdata_read_master_data_read_master_readdatavalid, --                 .readdatavalid
-			src_data             => qdata_read_master_data_source_data,               --      Data_Source.data
-			src_valid            => qdata_read_master_data_source_valid,              --                 .valid
-			src_ready            => qdata_read_master_data_source_ready,              --                 .ready
-			snk_command_data     => qdata_read_dispatcher_read_command_source_data,   --     Command_Sink.data
-			snk_command_valid    => qdata_read_dispatcher_read_command_source_valid,  --                 .valid
-			snk_command_ready    => qdata_read_dispatcher_read_command_source_ready,  --                 .ready
-			src_response_data    => qdata_read_master_response_source_data,           --  Response_Source.data
-			src_response_valid   => qdata_read_master_response_source_valid,          --                 .valid
-			src_response_ready   => qdata_read_master_response_source_ready,          --                 .ready
-			master_burstcount    => open,                                             --      (terminated)
-			src_sop              => open,                                             --      (terminated)
-			src_eop              => open,                                             --      (terminated)
-			src_empty            => open,                                             --      (terminated)
-			src_error            => open,                                             --      (terminated)
-			src_channel          => open                                              --      (terminated)
+			clk                => clk_clk,                                       --             Clock.clk
+			reset              => rst_controller_001_reset_out_reset,            --       Clock_reset.reset
+			master_address     => qu_write_master_data_write_master_address,     -- Data_Write_Master.address
+			master_write       => qu_write_master_data_write_master_write,       --                  .write
+			master_byteenable  => qu_write_master_data_write_master_byteenable,  --                  .byteenable
+			master_writedata   => qu_write_master_data_write_master_writedata,   --                  .writedata
+			master_waitrequest => qu_write_master_data_write_master_waitrequest, --                  .waitrequest
+			snk_data           => qu_data_fifo_out_data,                         --         Data_Sink.data
+			snk_valid          => qu_data_fifo_out_valid,                        --                  .valid
+			snk_ready          => qu_data_fifo_out_ready,                        --                  .ready
+			snk_command_data   => qu_dispatcher_write_command_source_data,       --      Command_Sink.data
+			snk_command_valid  => qu_dispatcher_write_command_source_valid,      --                  .valid
+			snk_command_ready  => qu_dispatcher_write_command_source_ready,      --                  .ready
+			src_response_data  => qu_write_master_response_source_data,          --   Response_Source.data
+			src_response_valid => qu_write_master_response_source_valid,         --                  .valid
+			src_response_ready => qu_write_master_response_source_ready,         --                  .ready
+			master_burstcount  => open,                                          --       (terminated)
+			snk_sop            => '0',                                           --       (terminated)
+			snk_eop            => '0',                                           --       (terminated)
+			snk_empty          => '0',                                           --       (terminated)
+			snk_error          => "00000000"                                     --       (terminated)
 		);
 
-	rfsend_0 : component RFSend
+	rfreceive_0 : component RFReceive
 		port map (
-			reset          => rst_controller_reset_out_reset, --        reset.reset
-			SendEnable     => rfsend_conduit_en_in,           --      conduit.en_in
-			TXD            => rfsend_conduit_rftxdata,        --             .rftxdata
-			TXEN           => rfsend_conduit_rftxen,          --             .rftxen
-			TXIQSEL        => rfsend_conduit_rftxiqsel,       --             .rftxiqsel
-			rfSend_i_data  => idata_fifo_out_data,            --    IDataFIFO.data
-			rfSend_i_ready => idata_fifo_out_ready,           --             .ready
-			rfSend_i_valid => idata_fifo_out_valid,           --             .valid
-			rfSend_i_clk   => rfsend_0_idatafifoclk_clk,      -- IDataFIFOCLK.clk
-			TXCLK          => rfsend_txclk_clk,               --      TxClock.clk
-			clk            => clk_clk,                        --     SysClock.clk
-			rfSend_q_data  => qdata_fifo_out_data,            --    QDataFIFO.data
-			rfSend_q_ready => qdata_fifo_out_ready,           --             .ready
-			rfSend_q_valid => qdata_fifo_out_valid,           --             .valid
-			rfSend_q_clk   => rfsend_0_qdatafifoclk_clk       -- QDataFIFOCLK.clk
-		);
-
-	sendcontrol : component sendCtrl
-		port map (
-			clk        => clk_clk,                                            --      clock.clk
-			reset      => rst_controller_reset_out_reset,                     --      reset.reset
-			SendEnable => sendcontrol_conduit_send_en,                        --    conduit.send_en
-			write_data => mm_interconnect_1_sendcontrol_sendctrlmm_writedata, -- SendCtrlMM.writedata
-			write_en   => mm_interconnect_1_sendcontrol_sendctrlmm_write      --           .write
+			clk           => clk_clk,                            --        clock.clk
+			reset         => rst_controller_001_reset_out_reset, --        reset.reset
+			RXCLK         => rfrec_rxclock,                      --      conduit.rxclock
+			RXD           => rfrec_rxdata,                       --             .rxdata
+			RXEN          => rfrec_rxenable,                     --             .rxenable
+			RXIQSEL       => rfrec_rxiq,                         --             .rxiq
+			RecEnable     => rfrec_recen,                        --             .recen
+			LED           => rfrec_testled,                      --             .testled
+			rfRec_i_data  => rfreceive_0_idatafifo_data,         --    IDataFIFO.data
+			rfRec_i_ready => rfreceive_0_idatafifo_ready,        --             .ready
+			rfRec_i_valid => rfreceive_0_idatafifo_valid,        --             .valid
+			rfRec_q_data  => rfreceive_0_qdatafifo_data,         --    QDataFIFO.data
+			rfRec_q_ready => rfreceive_0_qdatafifo_ready,        --             .ready
+			rfRec_q_valid => rfreceive_0_qdatafifo_valid,        --             .valid
+			rfRec_i_clk   => rfreceive_0_idatafifoclk_clk,       -- IDataFIFOCLK.clk
+			rfRec_q_clk   => rfreceive_0_qdatafifoclk_clk        -- QDataFIFOCLK.clk
 		);
 
 	hps_0 : component soc_hps_0
@@ -863,157 +844,164 @@ begin
 			S2F_Width => 0
 		)
 		port map (
-			mem_a                    => memory_mem_a,                                          --            memory.mem_a
-			mem_ba                   => memory_mem_ba,                                         --                  .mem_ba
-			mem_ck                   => memory_mem_ck,                                         --                  .mem_ck
-			mem_ck_n                 => memory_mem_ck_n,                                       --                  .mem_ck_n
-			mem_cke                  => memory_mem_cke,                                        --                  .mem_cke
-			mem_cs_n                 => memory_mem_cs_n,                                       --                  .mem_cs_n
-			mem_ras_n                => memory_mem_ras_n,                                      --                  .mem_ras_n
-			mem_cas_n                => memory_mem_cas_n,                                      --                  .mem_cas_n
-			mem_we_n                 => memory_mem_we_n,                                       --                  .mem_we_n
-			mem_reset_n              => memory_mem_reset_n,                                    --                  .mem_reset_n
-			mem_dq                   => memory_mem_dq,                                         --                  .mem_dq
-			mem_dqs                  => memory_mem_dqs,                                        --                  .mem_dqs
-			mem_dqs_n                => memory_mem_dqs_n,                                      --                  .mem_dqs_n
-			mem_odt                  => memory_mem_odt,                                        --                  .mem_odt
-			mem_dm                   => memory_mem_dm,                                         --                  .mem_dm
-			oct_rzqin                => memory_oct_rzqin,                                      --                  .oct_rzqin
-			h2f_rst_n                => hps_0_h2f_reset_reset,                                 --         h2f_reset.reset_n
-			f2h_sdram0_clk           => clk_clk,                                               --  f2h_sdram0_clock.clk
-			f2h_sdram0_ADDRESS       => mm_interconnect_0_hps_0_f2h_sdram0_data_address,       --   f2h_sdram0_data.address
-			f2h_sdram0_BURSTCOUNT    => mm_interconnect_0_hps_0_f2h_sdram0_data_burstcount,    --                  .burstcount
-			f2h_sdram0_WAITREQUEST   => mm_interconnect_0_hps_0_f2h_sdram0_data_waitrequest,   --                  .waitrequest
-			f2h_sdram0_READDATA      => mm_interconnect_0_hps_0_f2h_sdram0_data_readdata,      --                  .readdata
-			f2h_sdram0_READDATAVALID => mm_interconnect_0_hps_0_f2h_sdram0_data_readdatavalid, --                  .readdatavalid
-			f2h_sdram0_READ          => mm_interconnect_0_hps_0_f2h_sdram0_data_read,          --                  .read
-			h2f_lw_axi_clk           => clk_clk,                                               --  h2f_lw_axi_clock.clk
-			h2f_lw_AWID              => hps_0_h2f_lw_axi_master_awid,                          -- h2f_lw_axi_master.awid
-			h2f_lw_AWADDR            => hps_0_h2f_lw_axi_master_awaddr,                        --                  .awaddr
-			h2f_lw_AWLEN             => hps_0_h2f_lw_axi_master_awlen,                         --                  .awlen
-			h2f_lw_AWSIZE            => hps_0_h2f_lw_axi_master_awsize,                        --                  .awsize
-			h2f_lw_AWBURST           => hps_0_h2f_lw_axi_master_awburst,                       --                  .awburst
-			h2f_lw_AWLOCK            => hps_0_h2f_lw_axi_master_awlock,                        --                  .awlock
-			h2f_lw_AWCACHE           => hps_0_h2f_lw_axi_master_awcache,                       --                  .awcache
-			h2f_lw_AWPROT            => hps_0_h2f_lw_axi_master_awprot,                        --                  .awprot
-			h2f_lw_AWVALID           => hps_0_h2f_lw_axi_master_awvalid,                       --                  .awvalid
-			h2f_lw_AWREADY           => hps_0_h2f_lw_axi_master_awready,                       --                  .awready
-			h2f_lw_WID               => hps_0_h2f_lw_axi_master_wid,                           --                  .wid
-			h2f_lw_WDATA             => hps_0_h2f_lw_axi_master_wdata,                         --                  .wdata
-			h2f_lw_WSTRB             => hps_0_h2f_lw_axi_master_wstrb,                         --                  .wstrb
-			h2f_lw_WLAST             => hps_0_h2f_lw_axi_master_wlast,                         --                  .wlast
-			h2f_lw_WVALID            => hps_0_h2f_lw_axi_master_wvalid,                        --                  .wvalid
-			h2f_lw_WREADY            => hps_0_h2f_lw_axi_master_wready,                        --                  .wready
-			h2f_lw_BID               => hps_0_h2f_lw_axi_master_bid,                           --                  .bid
-			h2f_lw_BRESP             => hps_0_h2f_lw_axi_master_bresp,                         --                  .bresp
-			h2f_lw_BVALID            => hps_0_h2f_lw_axi_master_bvalid,                        --                  .bvalid
-			h2f_lw_BREADY            => hps_0_h2f_lw_axi_master_bready,                        --                  .bready
-			h2f_lw_ARID              => hps_0_h2f_lw_axi_master_arid,                          --                  .arid
-			h2f_lw_ARADDR            => hps_0_h2f_lw_axi_master_araddr,                        --                  .araddr
-			h2f_lw_ARLEN             => hps_0_h2f_lw_axi_master_arlen,                         --                  .arlen
-			h2f_lw_ARSIZE            => hps_0_h2f_lw_axi_master_arsize,                        --                  .arsize
-			h2f_lw_ARBURST           => hps_0_h2f_lw_axi_master_arburst,                       --                  .arburst
-			h2f_lw_ARLOCK            => hps_0_h2f_lw_axi_master_arlock,                        --                  .arlock
-			h2f_lw_ARCACHE           => hps_0_h2f_lw_axi_master_arcache,                       --                  .arcache
-			h2f_lw_ARPROT            => hps_0_h2f_lw_axi_master_arprot,                        --                  .arprot
-			h2f_lw_ARVALID           => hps_0_h2f_lw_axi_master_arvalid,                       --                  .arvalid
-			h2f_lw_ARREADY           => hps_0_h2f_lw_axi_master_arready,                       --                  .arready
-			h2f_lw_RID               => hps_0_h2f_lw_axi_master_rid,                           --                  .rid
-			h2f_lw_RDATA             => hps_0_h2f_lw_axi_master_rdata,                         --                  .rdata
-			h2f_lw_RRESP             => hps_0_h2f_lw_axi_master_rresp,                         --                  .rresp
-			h2f_lw_RLAST             => hps_0_h2f_lw_axi_master_rlast,                         --                  .rlast
-			h2f_lw_RVALID            => hps_0_h2f_lw_axi_master_rvalid,                        --                  .rvalid
-			h2f_lw_RREADY            => hps_0_h2f_lw_axi_master_rready                         --                  .rready
+			mem_a                  => memory_mem_a,                                        --            memory.mem_a
+			mem_ba                 => memory_mem_ba,                                       --                  .mem_ba
+			mem_ck                 => memory_mem_ck,                                       --                  .mem_ck
+			mem_ck_n               => memory_mem_ck_n,                                     --                  .mem_ck_n
+			mem_cke                => memory_mem_cke,                                      --                  .mem_cke
+			mem_cs_n               => memory_mem_cs_n,                                     --                  .mem_cs_n
+			mem_ras_n              => memory_mem_ras_n,                                    --                  .mem_ras_n
+			mem_cas_n              => memory_mem_cas_n,                                    --                  .mem_cas_n
+			mem_we_n               => memory_mem_we_n,                                     --                  .mem_we_n
+			mem_reset_n            => memory_mem_reset_n,                                  --                  .mem_reset_n
+			mem_dq                 => memory_mem_dq,                                       --                  .mem_dq
+			mem_dqs                => memory_mem_dqs,                                      --                  .mem_dqs
+			mem_dqs_n              => memory_mem_dqs_n,                                    --                  .mem_dqs_n
+			mem_odt                => memory_mem_odt,                                      --                  .mem_odt
+			mem_dm                 => memory_mem_dm,                                       --                  .mem_dm
+			oct_rzqin              => memory_oct_rzqin,                                    --                  .oct_rzqin
+			h2f_rst_n              => hps_0_h2f_reset_reset,                               --         h2f_reset.reset_n
+			f2h_sdram0_clk         => clk_clk,                                             --  f2h_sdram0_clock.clk
+			f2h_sdram0_ADDRESS     => mm_interconnect_0_hps_0_f2h_sdram0_data_address,     --   f2h_sdram0_data.address
+			f2h_sdram0_BURSTCOUNT  => mm_interconnect_0_hps_0_f2h_sdram0_data_burstcount,  --                  .burstcount
+			f2h_sdram0_WAITREQUEST => mm_interconnect_0_hps_0_f2h_sdram0_data_waitrequest, --                  .waitrequest
+			f2h_sdram0_WRITEDATA   => mm_interconnect_0_hps_0_f2h_sdram0_data_writedata,   --                  .writedata
+			f2h_sdram0_BYTEENABLE  => mm_interconnect_0_hps_0_f2h_sdram0_data_byteenable,  --                  .byteenable
+			f2h_sdram0_WRITE       => mm_interconnect_0_hps_0_f2h_sdram0_data_write,       --                  .write
+			h2f_lw_axi_clk         => clk_clk,                                             --  h2f_lw_axi_clock.clk
+			h2f_lw_AWID            => hps_0_h2f_lw_axi_master_awid,                        -- h2f_lw_axi_master.awid
+			h2f_lw_AWADDR          => hps_0_h2f_lw_axi_master_awaddr,                      --                  .awaddr
+			h2f_lw_AWLEN           => hps_0_h2f_lw_axi_master_awlen,                       --                  .awlen
+			h2f_lw_AWSIZE          => hps_0_h2f_lw_axi_master_awsize,                      --                  .awsize
+			h2f_lw_AWBURST         => hps_0_h2f_lw_axi_master_awburst,                     --                  .awburst
+			h2f_lw_AWLOCK          => hps_0_h2f_lw_axi_master_awlock,                      --                  .awlock
+			h2f_lw_AWCACHE         => hps_0_h2f_lw_axi_master_awcache,                     --                  .awcache
+			h2f_lw_AWPROT          => hps_0_h2f_lw_axi_master_awprot,                      --                  .awprot
+			h2f_lw_AWVALID         => hps_0_h2f_lw_axi_master_awvalid,                     --                  .awvalid
+			h2f_lw_AWREADY         => hps_0_h2f_lw_axi_master_awready,                     --                  .awready
+			h2f_lw_WID             => hps_0_h2f_lw_axi_master_wid,                         --                  .wid
+			h2f_lw_WDATA           => hps_0_h2f_lw_axi_master_wdata,                       --                  .wdata
+			h2f_lw_WSTRB           => hps_0_h2f_lw_axi_master_wstrb,                       --                  .wstrb
+			h2f_lw_WLAST           => hps_0_h2f_lw_axi_master_wlast,                       --                  .wlast
+			h2f_lw_WVALID          => hps_0_h2f_lw_axi_master_wvalid,                      --                  .wvalid
+			h2f_lw_WREADY          => hps_0_h2f_lw_axi_master_wready,                      --                  .wready
+			h2f_lw_BID             => hps_0_h2f_lw_axi_master_bid,                         --                  .bid
+			h2f_lw_BRESP           => hps_0_h2f_lw_axi_master_bresp,                       --                  .bresp
+			h2f_lw_BVALID          => hps_0_h2f_lw_axi_master_bvalid,                      --                  .bvalid
+			h2f_lw_BREADY          => hps_0_h2f_lw_axi_master_bready,                      --                  .bready
+			h2f_lw_ARID            => hps_0_h2f_lw_axi_master_arid,                        --                  .arid
+			h2f_lw_ARADDR          => hps_0_h2f_lw_axi_master_araddr,                      --                  .araddr
+			h2f_lw_ARLEN           => hps_0_h2f_lw_axi_master_arlen,                       --                  .arlen
+			h2f_lw_ARSIZE          => hps_0_h2f_lw_axi_master_arsize,                      --                  .arsize
+			h2f_lw_ARBURST         => hps_0_h2f_lw_axi_master_arburst,                     --                  .arburst
+			h2f_lw_ARLOCK          => hps_0_h2f_lw_axi_master_arlock,                      --                  .arlock
+			h2f_lw_ARCACHE         => hps_0_h2f_lw_axi_master_arcache,                     --                  .arcache
+			h2f_lw_ARPROT          => hps_0_h2f_lw_axi_master_arprot,                      --                  .arprot
+			h2f_lw_ARVALID         => hps_0_h2f_lw_axi_master_arvalid,                     --                  .arvalid
+			h2f_lw_ARREADY         => hps_0_h2f_lw_axi_master_arready,                     --                  .arready
+			h2f_lw_RID             => hps_0_h2f_lw_axi_master_rid,                         --                  .rid
+			h2f_lw_RDATA           => hps_0_h2f_lw_axi_master_rdata,                       --                  .rdata
+			h2f_lw_RRESP           => hps_0_h2f_lw_axi_master_rresp,                       --                  .rresp
+			h2f_lw_RLAST           => hps_0_h2f_lw_axi_master_rlast,                       --                  .rlast
+			h2f_lw_RVALID          => hps_0_h2f_lw_axi_master_rvalid,                      --                  .rvalid
+			h2f_lw_RREADY          => hps_0_h2f_lw_axi_master_rready                       --                  .rready
+		);
+
+	recctrl_0 : component recCtrl
+		port map (
+			clk        => clk_clk,                                         --     clock.clk
+			reset      => rst_controller_001_reset_out_reset,              --     reset.reset
+			RecEnable  => reccontrol_enrec,                                --   conduit.enrec
+			write_data => mm_interconnect_1_recctrl_0_recctrlmm_writedata, -- recCtrlMM.writedata
+			write_en   => mm_interconnect_1_recctrl_0_recctrlmm_write      --          .write
 		);
 
 	mm_interconnect_0 : component soc_mm_interconnect_0
 		port map (
-			clk_0_clk_clk                                                      => clk_clk,                                               --                                                    clk_0_clk.clk
-			hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset => rst_controller_003_reset_out_reset,                    -- hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset.reset
-			IData_read_master_Clock_reset_reset_bridge_in_reset_reset          => rst_controller_reset_out_reset,                        --          IData_read_master_Clock_reset_reset_bridge_in_reset.reset
-			IData_read_master_Data_Read_Master_address                         => idata_read_master_data_read_master_address,            --                           IData_read_master_Data_Read_Master.address
-			IData_read_master_Data_Read_Master_waitrequest                     => idata_read_master_data_read_master_waitrequest,        --                                                             .waitrequest
-			IData_read_master_Data_Read_Master_byteenable                      => idata_read_master_data_read_master_byteenable,         --                                                             .byteenable
-			IData_read_master_Data_Read_Master_read                            => idata_read_master_data_read_master_read,               --                                                             .read
-			IData_read_master_Data_Read_Master_readdata                        => idata_read_master_data_read_master_readdata,           --                                                             .readdata
-			IData_read_master_Data_Read_Master_readdatavalid                   => idata_read_master_data_read_master_readdatavalid,      --                                                             .readdatavalid
-			QData_read_master_Data_Read_Master_address                         => qdata_read_master_data_read_master_address,            --                           QData_read_master_Data_Read_Master.address
-			QData_read_master_Data_Read_Master_waitrequest                     => qdata_read_master_data_read_master_waitrequest,        --                                                             .waitrequest
-			QData_read_master_Data_Read_Master_byteenable                      => qdata_read_master_data_read_master_byteenable,         --                                                             .byteenable
-			QData_read_master_Data_Read_Master_read                            => qdata_read_master_data_read_master_read,               --                                                             .read
-			QData_read_master_Data_Read_Master_readdata                        => qdata_read_master_data_read_master_readdata,           --                                                             .readdata
-			QData_read_master_Data_Read_Master_readdatavalid                   => qdata_read_master_data_read_master_readdatavalid,      --                                                             .readdatavalid
-			hps_0_f2h_sdram0_data_address                                      => mm_interconnect_0_hps_0_f2h_sdram0_data_address,       --                                        hps_0_f2h_sdram0_data.address
-			hps_0_f2h_sdram0_data_read                                         => mm_interconnect_0_hps_0_f2h_sdram0_data_read,          --                                                             .read
-			hps_0_f2h_sdram0_data_readdata                                     => mm_interconnect_0_hps_0_f2h_sdram0_data_readdata,      --                                                             .readdata
-			hps_0_f2h_sdram0_data_burstcount                                   => mm_interconnect_0_hps_0_f2h_sdram0_data_burstcount,    --                                                             .burstcount
-			hps_0_f2h_sdram0_data_readdatavalid                                => mm_interconnect_0_hps_0_f2h_sdram0_data_readdatavalid, --                                                             .readdatavalid
-			hps_0_f2h_sdram0_data_waitrequest                                  => mm_interconnect_0_hps_0_f2h_sdram0_data_waitrequest    --                                                             .waitrequest
+			clk_0_clk_clk                                                      => clk_clk,                                             --                                                    clk_0_clk.clk
+			hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset_reset => rst_controller_003_reset_out_reset,                  -- hps_0_f2h_sdram0_data_translator_reset_reset_bridge_in_reset.reset
+			IN_WRITE_MASTER_Clock_reset_reset_bridge_in_reset_reset            => rst_controller_001_reset_out_reset,                  --            IN_WRITE_MASTER_Clock_reset_reset_bridge_in_reset.reset
+			IN_WRITE_MASTER_Data_Write_Master_address                          => in_write_master_data_write_master_address,           --                            IN_WRITE_MASTER_Data_Write_Master.address
+			IN_WRITE_MASTER_Data_Write_Master_waitrequest                      => in_write_master_data_write_master_waitrequest,       --                                                             .waitrequest
+			IN_WRITE_MASTER_Data_Write_Master_byteenable                       => in_write_master_data_write_master_byteenable,        --                                                             .byteenable
+			IN_WRITE_MASTER_Data_Write_Master_write                            => in_write_master_data_write_master_write,             --                                                             .write
+			IN_WRITE_MASTER_Data_Write_Master_writedata                        => in_write_master_data_write_master_writedata,         --                                                             .writedata
+			QU_WRITE_MASTER_Data_Write_Master_address                          => qu_write_master_data_write_master_address,           --                            QU_WRITE_MASTER_Data_Write_Master.address
+			QU_WRITE_MASTER_Data_Write_Master_waitrequest                      => qu_write_master_data_write_master_waitrequest,       --                                                             .waitrequest
+			QU_WRITE_MASTER_Data_Write_Master_byteenable                       => qu_write_master_data_write_master_byteenable,        --                                                             .byteenable
+			QU_WRITE_MASTER_Data_Write_Master_write                            => qu_write_master_data_write_master_write,             --                                                             .write
+			QU_WRITE_MASTER_Data_Write_Master_writedata                        => qu_write_master_data_write_master_writedata,         --                                                             .writedata
+			hps_0_f2h_sdram0_data_address                                      => mm_interconnect_0_hps_0_f2h_sdram0_data_address,     --                                        hps_0_f2h_sdram0_data.address
+			hps_0_f2h_sdram0_data_write                                        => mm_interconnect_0_hps_0_f2h_sdram0_data_write,       --                                                             .write
+			hps_0_f2h_sdram0_data_writedata                                    => mm_interconnect_0_hps_0_f2h_sdram0_data_writedata,   --                                                             .writedata
+			hps_0_f2h_sdram0_data_burstcount                                   => mm_interconnect_0_hps_0_f2h_sdram0_data_burstcount,  --                                                             .burstcount
+			hps_0_f2h_sdram0_data_byteenable                                   => mm_interconnect_0_hps_0_f2h_sdram0_data_byteenable,  --                                                             .byteenable
+			hps_0_f2h_sdram0_data_waitrequest                                  => mm_interconnect_0_hps_0_f2h_sdram0_data_waitrequest  --                                                             .waitrequest
 		);
 
 	mm_interconnect_1 : component soc_mm_interconnect_1
 		port map (
-			hps_0_h2f_lw_axi_master_awid                                        => hps_0_h2f_lw_axi_master_awid,                                         --                                       hps_0_h2f_lw_axi_master.awid
-			hps_0_h2f_lw_axi_master_awaddr                                      => hps_0_h2f_lw_axi_master_awaddr,                                       --                                                              .awaddr
-			hps_0_h2f_lw_axi_master_awlen                                       => hps_0_h2f_lw_axi_master_awlen,                                        --                                                              .awlen
-			hps_0_h2f_lw_axi_master_awsize                                      => hps_0_h2f_lw_axi_master_awsize,                                       --                                                              .awsize
-			hps_0_h2f_lw_axi_master_awburst                                     => hps_0_h2f_lw_axi_master_awburst,                                      --                                                              .awburst
-			hps_0_h2f_lw_axi_master_awlock                                      => hps_0_h2f_lw_axi_master_awlock,                                       --                                                              .awlock
-			hps_0_h2f_lw_axi_master_awcache                                     => hps_0_h2f_lw_axi_master_awcache,                                      --                                                              .awcache
-			hps_0_h2f_lw_axi_master_awprot                                      => hps_0_h2f_lw_axi_master_awprot,                                       --                                                              .awprot
-			hps_0_h2f_lw_axi_master_awvalid                                     => hps_0_h2f_lw_axi_master_awvalid,                                      --                                                              .awvalid
-			hps_0_h2f_lw_axi_master_awready                                     => hps_0_h2f_lw_axi_master_awready,                                      --                                                              .awready
-			hps_0_h2f_lw_axi_master_wid                                         => hps_0_h2f_lw_axi_master_wid,                                          --                                                              .wid
-			hps_0_h2f_lw_axi_master_wdata                                       => hps_0_h2f_lw_axi_master_wdata,                                        --                                                              .wdata
-			hps_0_h2f_lw_axi_master_wstrb                                       => hps_0_h2f_lw_axi_master_wstrb,                                        --                                                              .wstrb
-			hps_0_h2f_lw_axi_master_wlast                                       => hps_0_h2f_lw_axi_master_wlast,                                        --                                                              .wlast
-			hps_0_h2f_lw_axi_master_wvalid                                      => hps_0_h2f_lw_axi_master_wvalid,                                       --                                                              .wvalid
-			hps_0_h2f_lw_axi_master_wready                                      => hps_0_h2f_lw_axi_master_wready,                                       --                                                              .wready
-			hps_0_h2f_lw_axi_master_bid                                         => hps_0_h2f_lw_axi_master_bid,                                          --                                                              .bid
-			hps_0_h2f_lw_axi_master_bresp                                       => hps_0_h2f_lw_axi_master_bresp,                                        --                                                              .bresp
-			hps_0_h2f_lw_axi_master_bvalid                                      => hps_0_h2f_lw_axi_master_bvalid,                                       --                                                              .bvalid
-			hps_0_h2f_lw_axi_master_bready                                      => hps_0_h2f_lw_axi_master_bready,                                       --                                                              .bready
-			hps_0_h2f_lw_axi_master_arid                                        => hps_0_h2f_lw_axi_master_arid,                                         --                                                              .arid
-			hps_0_h2f_lw_axi_master_araddr                                      => hps_0_h2f_lw_axi_master_araddr,                                       --                                                              .araddr
-			hps_0_h2f_lw_axi_master_arlen                                       => hps_0_h2f_lw_axi_master_arlen,                                        --                                                              .arlen
-			hps_0_h2f_lw_axi_master_arsize                                      => hps_0_h2f_lw_axi_master_arsize,                                       --                                                              .arsize
-			hps_0_h2f_lw_axi_master_arburst                                     => hps_0_h2f_lw_axi_master_arburst,                                      --                                                              .arburst
-			hps_0_h2f_lw_axi_master_arlock                                      => hps_0_h2f_lw_axi_master_arlock,                                       --                                                              .arlock
-			hps_0_h2f_lw_axi_master_arcache                                     => hps_0_h2f_lw_axi_master_arcache,                                      --                                                              .arcache
-			hps_0_h2f_lw_axi_master_arprot                                      => hps_0_h2f_lw_axi_master_arprot,                                       --                                                              .arprot
-			hps_0_h2f_lw_axi_master_arvalid                                     => hps_0_h2f_lw_axi_master_arvalid,                                      --                                                              .arvalid
-			hps_0_h2f_lw_axi_master_arready                                     => hps_0_h2f_lw_axi_master_arready,                                      --                                                              .arready
-			hps_0_h2f_lw_axi_master_rid                                         => hps_0_h2f_lw_axi_master_rid,                                          --                                                              .rid
-			hps_0_h2f_lw_axi_master_rdata                                       => hps_0_h2f_lw_axi_master_rdata,                                        --                                                              .rdata
-			hps_0_h2f_lw_axi_master_rresp                                       => hps_0_h2f_lw_axi_master_rresp,                                        --                                                              .rresp
-			hps_0_h2f_lw_axi_master_rlast                                       => hps_0_h2f_lw_axi_master_rlast,                                        --                                                              .rlast
-			hps_0_h2f_lw_axi_master_rvalid                                      => hps_0_h2f_lw_axi_master_rvalid,                                       --                                                              .rvalid
-			hps_0_h2f_lw_axi_master_rready                                      => hps_0_h2f_lw_axi_master_rready,                                       --                                                              .rready
-			clk_0_clk_clk                                                       => clk_clk,                                                              --                                                     clk_0_clk.clk
-			hps_0_h2f_lw_axi_master_agent_clk_reset_reset_bridge_in_reset_reset => rst_controller_003_reset_out_reset,                                   -- hps_0_h2f_lw_axi_master_agent_clk_reset_reset_bridge_in_reset.reset
-			IData_read_dispatcher_clock_reset_reset_bridge_in_reset_reset       => rst_controller_reset_out_reset,                                       --       IData_read_dispatcher_clock_reset_reset_bridge_in_reset.reset
-			IData_read_dispatcher_CSR_address                                   => mm_interconnect_1_idata_read_dispatcher_csr_address,                  --                                     IData_read_dispatcher_CSR.address
-			IData_read_dispatcher_CSR_write                                     => mm_interconnect_1_idata_read_dispatcher_csr_write,                    --                                                              .write
-			IData_read_dispatcher_CSR_read                                      => mm_interconnect_1_idata_read_dispatcher_csr_read,                     --                                                              .read
-			IData_read_dispatcher_CSR_readdata                                  => mm_interconnect_1_idata_read_dispatcher_csr_readdata,                 --                                                              .readdata
-			IData_read_dispatcher_CSR_writedata                                 => mm_interconnect_1_idata_read_dispatcher_csr_writedata,                --                                                              .writedata
-			IData_read_dispatcher_CSR_byteenable                                => mm_interconnect_1_idata_read_dispatcher_csr_byteenable,               --                                                              .byteenable
-			IData_read_dispatcher_Descriptor_Slave_write                        => mm_interconnect_1_idata_read_dispatcher_descriptor_slave_write,       --                        IData_read_dispatcher_Descriptor_Slave.write
-			IData_read_dispatcher_Descriptor_Slave_writedata                    => mm_interconnect_1_idata_read_dispatcher_descriptor_slave_writedata,   --                                                              .writedata
-			IData_read_dispatcher_Descriptor_Slave_byteenable                   => mm_interconnect_1_idata_read_dispatcher_descriptor_slave_byteenable,  --                                                              .byteenable
-			IData_read_dispatcher_Descriptor_Slave_waitrequest                  => mm_interconnect_1_idata_read_dispatcher_descriptor_slave_waitrequest, --                                                              .waitrequest
-			QData_read_dispatcher_CSR_address                                   => mm_interconnect_1_qdata_read_dispatcher_csr_address,                  --                                     QData_read_dispatcher_CSR.address
-			QData_read_dispatcher_CSR_write                                     => mm_interconnect_1_qdata_read_dispatcher_csr_write,                    --                                                              .write
-			QData_read_dispatcher_CSR_read                                      => mm_interconnect_1_qdata_read_dispatcher_csr_read,                     --                                                              .read
-			QData_read_dispatcher_CSR_readdata                                  => mm_interconnect_1_qdata_read_dispatcher_csr_readdata,                 --                                                              .readdata
-			QData_read_dispatcher_CSR_writedata                                 => mm_interconnect_1_qdata_read_dispatcher_csr_writedata,                --                                                              .writedata
-			QData_read_dispatcher_CSR_byteenable                                => mm_interconnect_1_qdata_read_dispatcher_csr_byteenable,               --                                                              .byteenable
-			QData_read_dispatcher_Descriptor_Slave_write                        => mm_interconnect_1_qdata_read_dispatcher_descriptor_slave_write,       --                        QData_read_dispatcher_Descriptor_Slave.write
-			QData_read_dispatcher_Descriptor_Slave_writedata                    => mm_interconnect_1_qdata_read_dispatcher_descriptor_slave_writedata,   --                                                              .writedata
-			QData_read_dispatcher_Descriptor_Slave_byteenable                   => mm_interconnect_1_qdata_read_dispatcher_descriptor_slave_byteenable,  --                                                              .byteenable
-			QData_read_dispatcher_Descriptor_Slave_waitrequest                  => mm_interconnect_1_qdata_read_dispatcher_descriptor_slave_waitrequest, --                                                              .waitrequest
-			SendControl_SendCtrlMM_write                                        => mm_interconnect_1_sendcontrol_sendctrlmm_write,                       --                                        SendControl_SendCtrlMM.write
-			SendControl_SendCtrlMM_writedata                                    => mm_interconnect_1_sendcontrol_sendctrlmm_writedata                    --                                                              .writedata
+			hps_0_h2f_lw_axi_master_awid                                        => hps_0_h2f_lw_axi_master_awid,                                 --                                       hps_0_h2f_lw_axi_master.awid
+			hps_0_h2f_lw_axi_master_awaddr                                      => hps_0_h2f_lw_axi_master_awaddr,                               --                                                              .awaddr
+			hps_0_h2f_lw_axi_master_awlen                                       => hps_0_h2f_lw_axi_master_awlen,                                --                                                              .awlen
+			hps_0_h2f_lw_axi_master_awsize                                      => hps_0_h2f_lw_axi_master_awsize,                               --                                                              .awsize
+			hps_0_h2f_lw_axi_master_awburst                                     => hps_0_h2f_lw_axi_master_awburst,                              --                                                              .awburst
+			hps_0_h2f_lw_axi_master_awlock                                      => hps_0_h2f_lw_axi_master_awlock,                               --                                                              .awlock
+			hps_0_h2f_lw_axi_master_awcache                                     => hps_0_h2f_lw_axi_master_awcache,                              --                                                              .awcache
+			hps_0_h2f_lw_axi_master_awprot                                      => hps_0_h2f_lw_axi_master_awprot,                               --                                                              .awprot
+			hps_0_h2f_lw_axi_master_awvalid                                     => hps_0_h2f_lw_axi_master_awvalid,                              --                                                              .awvalid
+			hps_0_h2f_lw_axi_master_awready                                     => hps_0_h2f_lw_axi_master_awready,                              --                                                              .awready
+			hps_0_h2f_lw_axi_master_wid                                         => hps_0_h2f_lw_axi_master_wid,                                  --                                                              .wid
+			hps_0_h2f_lw_axi_master_wdata                                       => hps_0_h2f_lw_axi_master_wdata,                                --                                                              .wdata
+			hps_0_h2f_lw_axi_master_wstrb                                       => hps_0_h2f_lw_axi_master_wstrb,                                --                                                              .wstrb
+			hps_0_h2f_lw_axi_master_wlast                                       => hps_0_h2f_lw_axi_master_wlast,                                --                                                              .wlast
+			hps_0_h2f_lw_axi_master_wvalid                                      => hps_0_h2f_lw_axi_master_wvalid,                               --                                                              .wvalid
+			hps_0_h2f_lw_axi_master_wready                                      => hps_0_h2f_lw_axi_master_wready,                               --                                                              .wready
+			hps_0_h2f_lw_axi_master_bid                                         => hps_0_h2f_lw_axi_master_bid,                                  --                                                              .bid
+			hps_0_h2f_lw_axi_master_bresp                                       => hps_0_h2f_lw_axi_master_bresp,                                --                                                              .bresp
+			hps_0_h2f_lw_axi_master_bvalid                                      => hps_0_h2f_lw_axi_master_bvalid,                               --                                                              .bvalid
+			hps_0_h2f_lw_axi_master_bready                                      => hps_0_h2f_lw_axi_master_bready,                               --                                                              .bready
+			hps_0_h2f_lw_axi_master_arid                                        => hps_0_h2f_lw_axi_master_arid,                                 --                                                              .arid
+			hps_0_h2f_lw_axi_master_araddr                                      => hps_0_h2f_lw_axi_master_araddr,                               --                                                              .araddr
+			hps_0_h2f_lw_axi_master_arlen                                       => hps_0_h2f_lw_axi_master_arlen,                                --                                                              .arlen
+			hps_0_h2f_lw_axi_master_arsize                                      => hps_0_h2f_lw_axi_master_arsize,                               --                                                              .arsize
+			hps_0_h2f_lw_axi_master_arburst                                     => hps_0_h2f_lw_axi_master_arburst,                              --                                                              .arburst
+			hps_0_h2f_lw_axi_master_arlock                                      => hps_0_h2f_lw_axi_master_arlock,                               --                                                              .arlock
+			hps_0_h2f_lw_axi_master_arcache                                     => hps_0_h2f_lw_axi_master_arcache,                              --                                                              .arcache
+			hps_0_h2f_lw_axi_master_arprot                                      => hps_0_h2f_lw_axi_master_arprot,                               --                                                              .arprot
+			hps_0_h2f_lw_axi_master_arvalid                                     => hps_0_h2f_lw_axi_master_arvalid,                              --                                                              .arvalid
+			hps_0_h2f_lw_axi_master_arready                                     => hps_0_h2f_lw_axi_master_arready,                              --                                                              .arready
+			hps_0_h2f_lw_axi_master_rid                                         => hps_0_h2f_lw_axi_master_rid,                                  --                                                              .rid
+			hps_0_h2f_lw_axi_master_rdata                                       => hps_0_h2f_lw_axi_master_rdata,                                --                                                              .rdata
+			hps_0_h2f_lw_axi_master_rresp                                       => hps_0_h2f_lw_axi_master_rresp,                                --                                                              .rresp
+			hps_0_h2f_lw_axi_master_rlast                                       => hps_0_h2f_lw_axi_master_rlast,                                --                                                              .rlast
+			hps_0_h2f_lw_axi_master_rvalid                                      => hps_0_h2f_lw_axi_master_rvalid,                               --                                                              .rvalid
+			hps_0_h2f_lw_axi_master_rready                                      => hps_0_h2f_lw_axi_master_rready,                               --                                                              .rready
+			clk_0_clk_clk                                                       => clk_clk,                                                      --                                                     clk_0_clk.clk
+			hps_0_h2f_lw_axi_master_agent_clk_reset_reset_bridge_in_reset_reset => rst_controller_003_reset_out_reset,                           -- hps_0_h2f_lw_axi_master_agent_clk_reset_reset_bridge_in_reset.reset
+			IN_DISPATCHER_clock_reset_reset_bridge_in_reset_reset               => rst_controller_001_reset_out_reset,                           --               IN_DISPATCHER_clock_reset_reset_bridge_in_reset.reset
+			IN_DISPATCHER_CSR_address                                           => mm_interconnect_1_in_dispatcher_csr_address,                  --                                             IN_DISPATCHER_CSR.address
+			IN_DISPATCHER_CSR_write                                             => mm_interconnect_1_in_dispatcher_csr_write,                    --                                                              .write
+			IN_DISPATCHER_CSR_read                                              => mm_interconnect_1_in_dispatcher_csr_read,                     --                                                              .read
+			IN_DISPATCHER_CSR_readdata                                          => mm_interconnect_1_in_dispatcher_csr_readdata,                 --                                                              .readdata
+			IN_DISPATCHER_CSR_writedata                                         => mm_interconnect_1_in_dispatcher_csr_writedata,                --                                                              .writedata
+			IN_DISPATCHER_CSR_byteenable                                        => mm_interconnect_1_in_dispatcher_csr_byteenable,               --                                                              .byteenable
+			IN_DISPATCHER_Descriptor_Slave_write                                => mm_interconnect_1_in_dispatcher_descriptor_slave_write,       --                                IN_DISPATCHER_Descriptor_Slave.write
+			IN_DISPATCHER_Descriptor_Slave_writedata                            => mm_interconnect_1_in_dispatcher_descriptor_slave_writedata,   --                                                              .writedata
+			IN_DISPATCHER_Descriptor_Slave_byteenable                           => mm_interconnect_1_in_dispatcher_descriptor_slave_byteenable,  --                                                              .byteenable
+			IN_DISPATCHER_Descriptor_Slave_waitrequest                          => mm_interconnect_1_in_dispatcher_descriptor_slave_waitrequest, --                                                              .waitrequest
+			QU_DISPATCHER_CSR_address                                           => mm_interconnect_1_qu_dispatcher_csr_address,                  --                                             QU_DISPATCHER_CSR.address
+			QU_DISPATCHER_CSR_write                                             => mm_interconnect_1_qu_dispatcher_csr_write,                    --                                                              .write
+			QU_DISPATCHER_CSR_read                                              => mm_interconnect_1_qu_dispatcher_csr_read,                     --                                                              .read
+			QU_DISPATCHER_CSR_readdata                                          => mm_interconnect_1_qu_dispatcher_csr_readdata,                 --                                                              .readdata
+			QU_DISPATCHER_CSR_writedata                                         => mm_interconnect_1_qu_dispatcher_csr_writedata,                --                                                              .writedata
+			QU_DISPATCHER_CSR_byteenable                                        => mm_interconnect_1_qu_dispatcher_csr_byteenable,               --                                                              .byteenable
+			QU_DISPATCHER_Descriptor_Slave_write                                => mm_interconnect_1_qu_dispatcher_descriptor_slave_write,       --                                QU_DISPATCHER_Descriptor_Slave.write
+			QU_DISPATCHER_Descriptor_Slave_writedata                            => mm_interconnect_1_qu_dispatcher_descriptor_slave_writedata,   --                                                              .writedata
+			QU_DISPATCHER_Descriptor_Slave_byteenable                           => mm_interconnect_1_qu_dispatcher_descriptor_slave_byteenable,  --                                                              .byteenable
+			QU_DISPATCHER_Descriptor_Slave_waitrequest                          => mm_interconnect_1_qu_dispatcher_descriptor_slave_waitrequest, --                                                              .waitrequest
+			recCtrl_0_recCtrlMM_write                                           => mm_interconnect_1_recctrl_0_recctrlmm_write,                  --                                           recCtrl_0_recCtrlMM.write
+			recCtrl_0_recCtrlMM_writedata                                       => mm_interconnect_1_recctrl_0_recctrlmm_writedata               --                                                              .writedata
 		);
 
 	rst_controller : component altera_reset_controller
@@ -1045,7 +1033,7 @@ begin
 		)
 		port map (
 			reset_in0      => reset_reset_n_ports_inv,        -- reset_in0.reset
-			clk            => clk_clk,                        --       clk.clk
+			clk            => rfreceive_0_idatafifoclk_clk,   --       clk.clk
 			reset_out      => rst_controller_reset_out_reset, -- reset_out.reset
 			reset_req      => open,                           -- (terminated)
 			reset_req_in0  => '0',                            -- (terminated)
@@ -1110,7 +1098,7 @@ begin
 		)
 		port map (
 			reset_in0      => reset_reset_n_ports_inv,            -- reset_in0.reset
-			clk            => rfsend_0_idatafifoclk_clk,          --       clk.clk
+			clk            => clk_clk,                            --       clk.clk
 			reset_out      => rst_controller_001_reset_out_reset, -- reset_out.reset
 			reset_req      => open,                               -- (terminated)
 			reset_req_in0  => '0',                                -- (terminated)
@@ -1175,7 +1163,7 @@ begin
 		)
 		port map (
 			reset_in0      => reset_reset_n_ports_inv,            -- reset_in0.reset
-			clk            => rfsend_0_qdatafifoclk_clk,          --       clk.clk
+			clk            => rfreceive_0_qdatafifoclk_clk,       --       clk.clk
 			reset_out      => rst_controller_002_reset_out_reset, -- reset_out.reset
 			reset_req      => open,                               -- (terminated)
 			reset_req_in0  => '0',                                -- (terminated)

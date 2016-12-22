@@ -12,7 +12,7 @@ set ::GLOBAL_hps_sdram_p0_dqs_group_size 8
 set ::GLOBAL_hps_sdram_p0_number_of_ck_pins 1
 set ::GLOBAL_hps_sdram_p0_number_of_dm_pins 4
 set ::GLOBAL_hps_sdram_p0_dqs_delay_chain_length 0
-set ::GLOBAL_hps_sdram_p0_uniphy_temp_ver_code 201809710
+set ::GLOBAL_hps_sdram_p0_uniphy_temp_ver_code 1244153978
 # PLL Parameters
 
 #USER W A R N I N G !

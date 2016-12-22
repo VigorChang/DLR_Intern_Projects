@@ -167,8 +167,8 @@ module soc_mm_interconnect_0_router
     // -------------------------------------------------------
     // Write and read transaction signals
     // -------------------------------------------------------
-    wire read_transaction;
-    assign read_transaction  = sink_data[PKT_TRANS_READ];
+    wire write_transaction;
+    assign write_transaction = sink_data[PKT_TRANS_WRITE];
 
     // -------------------------------------------------------
     // Secure / Non-secured signal
@@ -194,7 +194,7 @@ module soc_mm_interconnect_0_router
         // Sets the channel and destination ID based on the address
         // --------------------------------------------------
         if (secured_transaction) begin   
-         if (read_transaction) begin
+         if (write_transaction) begin
           // ( 0 .. 100000000 )
           src_channel = 2'b1;
           src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 0;

@@ -6,50 +6,13 @@
    version="1.0"
    description=""
    tags=""
-   categories="System" />
+   categories="" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
    element $${FILENAME}
    {
-      datum _originalDeviceFamily
-      {
-         value = "Cyclone V";
-         type = "String";
-      }
    }
-   element IData_FIFO
-   {
-      datum _sortIndex
-      {
-         value = "5";
-         type = "int";
-      }
-   }
-   element IData_read_dispatcher
-   {
-      datum _sortIndex
-      {
-         value = "3";
-         type = "int";
-      }
-   }
-   element IData_read_dispatcher.CSR
-   {
-      datum _lockedAddress
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element IData_read_dispatcher.Descriptor_Slave
-   {
-      datum _lockedAddress
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element IData_read_master
+   element IN_DATA_FIFO
    {
       datum _sortIndex
       {
@@ -57,15 +20,7 @@
          type = "int";
       }
    }
-   element QData_FIFO
-   {
-      datum _sortIndex
-      {
-         value = "8";
-         type = "int";
-      }
-   }
-   element QData_read_dispatcher
+   element IN_DISPATCHER
    {
       datum _sortIndex
       {
@@ -73,23 +28,7 @@
          type = "int";
       }
    }
-   element QData_read_dispatcher.CSR
-   {
-      datum _lockedAddress
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element QData_read_dispatcher.Descriptor_Slave
-   {
-      datum _lockedAddress
-      {
-         value = "1";
-         type = "boolean";
-      }
-   }
-   element QData_read_master
+   element IN_WRITE_MASTER
    {
       datum _sortIndex
       {
@@ -97,19 +36,35 @@
          type = "int";
       }
    }
-   element RFSend_0
+   element QU_DATA_FIFO
    {
       datum _sortIndex
       {
-         value = "2";
+         value = "5";
          type = "int";
       }
    }
-   element SendControl
+   element QU_DISPATCHER
+   {
+      datum _sortIndex
+      {
+         value = "8";
+         type = "int";
+      }
+   }
+   element QU_WRITE_MASTER
    {
       datum _sortIndex
       {
          value = "9";
+         type = "int";
+      }
+   }
+   element RFReceive_0
+   {
+      datum _sortIndex
+      {
+         value = "3";
          type = "int";
       }
    }
@@ -129,84 +84,12 @@
          type = "int";
       }
    }
-   element soc
+   element recCtrl_0
    {
-      datum _originalDeviceFamily
+      datum _sortIndex
       {
-         value = "Cyclone V";
-         type = "String";
-      }
-   }
-   element soc
-   {
-      datum _originalDeviceFamily
-      {
-         value = "Cyclone V";
-         type = "String";
-      }
-   }
-   element soc
-   {
-      datum _originalDeviceFamily
-      {
-         value = "Cyclone V";
-         type = "String";
-      }
-   }
-   element soc
-   {
-      datum _originalDeviceFamily
-      {
-         value = "Cyclone V";
-         type = "String";
-      }
-   }
-   element unsaved
-   {
-      datum _originalDeviceFamily
-      {
-         value = "Cyclone V";
-         type = "String";
-      }
-   }
-   element unsaved
-   {
-      datum _originalDeviceFamily
-      {
-         value = "Cyclone V";
-         type = "String";
-      }
-   }
-   element unsaved
-   {
-      datum _originalDeviceFamily
-      {
-         value = "Cyclone V";
-         type = "String";
-      }
-   }
-   element unsaved
-   {
-      datum _originalDeviceFamily
-      {
-         value = "Cyclone V";
-         type = "String";
-      }
-   }
-   element unsaved
-   {
-      datum _originalDeviceFamily
-      {
-         value = "Cyclone V";
-         type = "String";
-      }
-   }
-   element unsaved
-   {
-      datum _originalDeviceFamily
-      {
-         value = "Cyclone V";
-         type = "String";
+         value = "2";
+         type = "int";
       }
    }
 }
@@ -223,7 +106,7 @@
  <parameter name="hideFromIPCatalog" value="false" />
  <parameter name="lockedInterfaceDefinition" value="" />
  <parameter name="maxAdditionalLatency" value="1" />
- <parameter name="projectName" value="rfDemo.qpf" />
+ <parameter name="projectName" value="" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="testBenchDutName" value="" />
@@ -232,24 +115,15 @@
  <instanceScript></instanceScript>
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
  <interface name="memory" internal="hps_0.memory" type="conduit" dir="end" />
+ <interface
+   name="reccontrol"
+   internal="recCtrl_0.conduit"
+   type="conduit"
+   dir="end" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
- <interface
-   name="rfsend_conduit"
-   internal="RFSend_0.conduit"
-   type="conduit"
-   dir="end" />
- <interface
-   name="rfsend_txclk"
-   internal="RFSend_0.TxClock"
-   type="clock"
-   dir="end" />
- <interface
-   name="sendcontrol_conduit"
-   internal="SendControl.conduit"
-   type="conduit"
-   dir="end" />
+ <interface name="rfrec" internal="RFReceive_0.conduit" type="conduit" dir="end" />
  <module
-   name="IData_FIFO"
+   name="IN_DATA_FIFO"
    kind="altera_avalon_dc_fifo"
    version="15.0"
    enabled="1">
@@ -268,7 +142,7 @@
   <parameter name="WR_SYNC_DEPTH" value="16" />
  </module>
  <module
-   name="IData_read_dispatcher"
+   name="IN_DISPATCHER"
    kind="modular_sgdma_dispatcher"
    version="15.0"
    enabled="1">
@@ -279,23 +153,21 @@
   <parameter name="DATA_WIDTH" value="32" />
   <parameter name="DESCRIPTOR_FIFO_DEPTH" value="8" />
   <parameter name="ENHANCED_FEATURES" value="0" />
-  <parameter name="GUI_RESPONSE_PORT" value="0" />
+  <parameter name="GUI_RESPONSE_PORT" value="2" />
   <parameter name="MAX_BURST_COUNT" value="2" />
   <parameter name="MAX_BYTE" value="1024" />
   <parameter name="MAX_STRIDE" value="1" />
-  <parameter name="MODE" value="1" />
+  <parameter name="MODE" value="2" />
   <parameter name="PROGRAMMABLE_BURST_ENABLE" value="0" />
   <parameter name="STRIDE_ENABLE" value="0" />
   <parameter name="TRANSFER_TYPE" value="Aligned Accesses" />
  </module>
  <module
-   name="IData_read_master"
-   kind="dma_read_master"
+   name="IN_WRITE_MASTER"
+   kind="dma_write_master"
    version="15.0"
    enabled="1">
   <parameter name="BURST_ENABLE" value="0" />
-  <parameter name="CHANNEL_ENABLE" value="0" />
-  <parameter name="CHANNEL_WIDTH" value="8" />
   <parameter name="DATA_WIDTH" value="16" />
   <parameter name="ERROR_ENABLE" value="0" />
   <parameter name="ERROR_WIDTH" value="8" />
@@ -311,7 +183,7 @@
   <parameter name="TRANSFER_TYPE" value="Aligned Accesses" />
  </module>
  <module
-   name="QData_FIFO"
+   name="QU_DATA_FIFO"
    kind="altera_avalon_dc_fifo"
    version="15.0"
    enabled="1">
@@ -330,7 +202,7 @@
   <parameter name="WR_SYNC_DEPTH" value="16" />
  </module>
  <module
-   name="QData_read_dispatcher"
+   name="QU_DISPATCHER"
    kind="modular_sgdma_dispatcher"
    version="15.0"
    enabled="1">
@@ -341,23 +213,21 @@
   <parameter name="DATA_WIDTH" value="32" />
   <parameter name="DESCRIPTOR_FIFO_DEPTH" value="8" />
   <parameter name="ENHANCED_FEATURES" value="0" />
-  <parameter name="GUI_RESPONSE_PORT" value="0" />
+  <parameter name="GUI_RESPONSE_PORT" value="2" />
   <parameter name="MAX_BURST_COUNT" value="2" />
   <parameter name="MAX_BYTE" value="1024" />
   <parameter name="MAX_STRIDE" value="1" />
-  <parameter name="MODE" value="1" />
+  <parameter name="MODE" value="2" />
   <parameter name="PROGRAMMABLE_BURST_ENABLE" value="0" />
   <parameter name="STRIDE_ENABLE" value="0" />
   <parameter name="TRANSFER_TYPE" value="Aligned Accesses" />
  </module>
  <module
-   name="QData_read_master"
-   kind="dma_read_master"
+   name="QU_WRITE_MASTER"
+   kind="dma_write_master"
    version="15.0"
    enabled="1">
   <parameter name="BURST_ENABLE" value="0" />
-  <parameter name="CHANNEL_ENABLE" value="0" />
-  <parameter name="CHANNEL_WIDTH" value="8" />
   <parameter name="DATA_WIDTH" value="16" />
   <parameter name="ERROR_ENABLE" value="0" />
   <parameter name="ERROR_WIDTH" value="8" />
@@ -372,8 +242,7 @@
   <parameter name="STRIDE_ENABLE" value="0" />
   <parameter name="TRANSFER_TYPE" value="Aligned Accesses" />
  </module>
- <module name="RFSend_0" kind="RFSend" version="1.0" enabled="1" />
- <module name="SendControl" kind="SendControl" version="1.0" enabled="1" />
+ <module name="RFReceive_0" kind="RFReceive" version="1.0" enabled="1" />
  <module name="clk_0" kind="clock_source" version="15.0" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
@@ -488,7 +357,7 @@
   <parameter name="F2SCLK_SDRAMCLK_Enable" value="false" />
   <parameter name="F2SCLK_SDRAMCLK_FREQ" value="0" />
   <parameter name="F2SCLK_WARMRST_Enable" value="false" />
-  <parameter name="F2SDRAM_Type" value="Avalon-MM Read-Only" />
+  <parameter name="F2SDRAM_Type">Avalon-MM Write-Only</parameter>
   <parameter name="F2SDRAM_Width" value="64" />
   <parameter name="F2SINTERRUPT_Enable" value="false" />
   <parameter name="F2S_Width" value="0" />
@@ -906,10 +775,11 @@
   <parameter name="usb_mp_clk_div" value="0" />
   <parameter name="use_default_mpu_clk" value="true" />
  </module>
+ <module name="recCtrl_0" kind="recCtrl" version="1.0" enabled="1" />
  <connection
    kind="avalon"
    version="15.0"
-   start="IData_read_master.Data_Read_Master"
+   start="IN_WRITE_MASTER.Data_Write_Master"
    end="hps_0.f2h_sdram0_data">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
@@ -918,7 +788,7 @@
  <connection
    kind="avalon"
    version="15.0"
-   start="QData_read_master.Data_Read_Master"
+   start="QU_WRITE_MASTER.Data_Write_Master"
    end="hps_0.f2h_sdram0_data">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
@@ -928,25 +798,7 @@
    kind="avalon"
    version="15.0"
    start="hps_0.h2f_lw_axi_master"
-   end="IData_read_dispatcher.CSR">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.0"
-   start="hps_0.h2f_lw_axi_master"
-   end="QData_read_dispatcher.CSR">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0200" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="15.0"
-   start="hps_0.h2f_lw_axi_master"
-   end="IData_read_dispatcher.Descriptor_Slave">
+   end="IN_DISPATCHER.CSR">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0100" />
   <parameter name="defaultConnection" value="false" />
@@ -955,7 +807,7 @@
    kind="avalon"
    version="15.0"
    start="hps_0.h2f_lw_axi_master"
-   end="QData_read_dispatcher.Descriptor_Slave">
+   end="QU_DISPATCHER.CSR">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0300" />
   <parameter name="defaultConnection" value="false" />
@@ -964,83 +816,101 @@
    kind="avalon"
    version="15.0"
    start="hps_0.h2f_lw_axi_master"
-   end="SendControl.SendCtrlMM">
+   end="IN_DISPATCHER.Descriptor_Slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0200" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.0"
+   start="hps_0.h2f_lw_axi_master"
+   end="QU_DISPATCHER.Descriptor_Slave">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0400" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
-   kind="avalon_streaming"
+   kind="avalon"
    version="15.0"
-   start="IData_read_master.Data_Source"
-   end="IData_FIFO.in" />
+   start="hps_0.h2f_lw_axi_master"
+   end="recCtrl_0.recCtrlMM">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
  <connection
    kind="avalon_streaming"
    version="15.0"
-   start="QData_read_master.Data_Source"
-   end="QData_FIFO.in" />
+   start="RFReceive_0.IDataFIFO"
+   end="IN_DATA_FIFO.in" />
  <connection
    kind="avalon_streaming"
    version="15.0"
-   start="IData_read_dispatcher.Read_Command_Source"
-   end="IData_read_master.Command_Sink" />
+   start="RFReceive_0.QDataFIFO"
+   end="QU_DATA_FIFO.in" />
  <connection
    kind="avalon_streaming"
    version="15.0"
-   start="QData_read_dispatcher.Read_Command_Source"
-   end="QData_read_master.Command_Sink" />
+   start="IN_WRITE_MASTER.Response_Source"
+   end="IN_DISPATCHER.Write_Response_Sink" />
  <connection
    kind="avalon_streaming"
    version="15.0"
-   start="IData_read_master.Response_Source"
-   end="IData_read_dispatcher.Read_Response_Sink" />
+   start="QU_WRITE_MASTER.Response_Source"
+   end="QU_DISPATCHER.Write_Response_Sink" />
  <connection
    kind="avalon_streaming"
    version="15.0"
-   start="QData_read_master.Response_Source"
-   end="QData_read_dispatcher.Read_Response_Sink" />
+   start="IN_DISPATCHER.Write_Command_Source"
+   end="IN_WRITE_MASTER.Command_Sink" />
  <connection
    kind="avalon_streaming"
    version="15.0"
-   start="IData_FIFO.out"
-   end="RFSend_0.IDataFIFO" />
+   start="QU_DISPATCHER.Write_Command_Source"
+   end="QU_WRITE_MASTER.Command_Sink" />
  <connection
    kind="avalon_streaming"
    version="15.0"
-   start="QData_FIFO.out"
-   end="RFSend_0.QDataFIFO" />
+   start="IN_DATA_FIFO.out"
+   end="IN_WRITE_MASTER.Data_Sink" />
+ <connection
+   kind="avalon_streaming"
+   version="15.0"
+   start="QU_DATA_FIFO.out"
+   end="QU_WRITE_MASTER.Data_Sink" />
  <connection
    kind="clock"
    version="15.0"
-   start="RFSend_0.IDataFIFOCLK"
-   end="IData_FIFO.out_clk" />
+   start="RFReceive_0.IDataFIFOCLK"
+   end="IN_DATA_FIFO.in_clk" />
  <connection
    kind="clock"
    version="15.0"
-   start="RFSend_0.QDataFIFOCLK"
-   end="QData_FIFO.out_clk" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="clk_0.clk"
-   end="IData_read_master.Clock" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="clk_0.clk"
-   end="QData_read_master.Clock" />
- <connection kind="clock" version="15.0" start="clk_0.clk" end="RFSend_0.SysClock" />
- <connection
-   kind="clock"
-   version="15.0"
-   start="clk_0.clk"
-   end="IData_read_dispatcher.clock" />
+   start="RFReceive_0.QDataFIFOCLK"
+   end="QU_DATA_FIFO.in_clk" />
  <connection
    kind="clock"
    version="15.0"
    start="clk_0.clk"
-   end="QData_read_dispatcher.clock" />
- <connection kind="clock" version="15.0" start="clk_0.clk" end="SendControl.clock" />
+   end="IN_WRITE_MASTER.Clock" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="clk_0.clk"
+   end="QU_WRITE_MASTER.Clock" />
+ <connection kind="clock" version="15.0" start="clk_0.clk" end="recCtrl_0.clock" />
+ <connection kind="clock" version="15.0" start="clk_0.clk" end="RFReceive_0.clock" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="clk_0.clk"
+   end="IN_DISPATCHER.clock" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="clk_0.clk"
+   end="QU_DISPATCHER.clock" />
  <connection
    kind="clock"
    version="15.0"
@@ -1051,68 +921,76 @@
    version="15.0"
    start="clk_0.clk"
    end="hps_0.h2f_lw_axi_clock" />
- <connection kind="clock" version="15.0" start="clk_0.clk" end="IData_FIFO.in_clk" />
- <connection kind="clock" version="15.0" start="clk_0.clk" end="QData_FIFO.in_clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="clk_0.clk"
+   end="IN_DATA_FIFO.out_clk" />
+ <connection
+   kind="clock"
+   version="15.0"
+   start="clk_0.clk"
+   end="QU_DATA_FIFO.out_clk" />
  <connection
    kind="reset"
    version="15.0"
    start="clk_0.clk_reset"
-   end="IData_read_master.Clock_reset" />
+   end="IN_WRITE_MASTER.Clock_reset" />
  <connection
    kind="reset"
    version="15.0"
    start="clk_0.clk_reset"
-   end="QData_read_master.Clock_reset" />
+   end="QU_WRITE_MASTER.Clock_reset" />
  <connection
    kind="reset"
    version="15.0"
    start="clk_0.clk_reset"
-   end="IData_read_dispatcher.clock_reset" />
+   end="IN_DISPATCHER.clock_reset" />
  <connection
    kind="reset"
    version="15.0"
    start="clk_0.clk_reset"
-   end="QData_read_dispatcher.clock_reset" />
+   end="QU_DISPATCHER.clock_reset" />
  <connection
    kind="reset"
    version="15.0"
    start="clk_0.clk_reset"
-   end="IData_FIFO.in_clk_reset" />
+   end="IN_DATA_FIFO.in_clk_reset" />
  <connection
    kind="reset"
    version="15.0"
    start="clk_0.clk_reset"
-   end="QData_FIFO.in_clk_reset" />
+   end="QU_DATA_FIFO.in_clk_reset" />
  <connection
    kind="reset"
    version="15.0"
    start="clk_0.clk_reset"
-   end="IData_FIFO.out_clk_reset" />
+   end="IN_DATA_FIFO.out_clk_reset" />
  <connection
    kind="reset"
    version="15.0"
    start="clk_0.clk_reset"
-   end="QData_FIFO.out_clk_reset" />
+   end="QU_DATA_FIFO.out_clk_reset" />
  <connection
    kind="reset"
    version="15.0"
    start="clk_0.clk_reset"
-   end="RFSend_0.reset" />
+   end="recCtrl_0.reset" />
  <connection
    kind="reset"
    version="15.0"
    start="clk_0.clk_reset"
-   end="SendControl.reset" />
+   end="RFReceive_0.reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.enableEccProtection" value="FALSE" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
  <interconnectRequirement
-   for="IData_read_master.Data_Read_Master"
+   for="IN_WRITE_MASTER.Data_Write_Master"
    name="qsys_mm.security"
    value="SECURE" />
  <interconnectRequirement
-   for="QData_read_master.Data_Read_Master"
+   for="QU_WRITE_MASTER.Data_Write_Master"
    name="qsys_mm.security"
    value="SECURE" />
  <interconnectRequirement for="hps_0.f2h_sdram0_data" name="qsys_mm.security" value="SECURE" />
